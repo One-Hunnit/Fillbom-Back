@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Add application.yml to be tracked by Git
+!**/src/main/resources/application.yml
