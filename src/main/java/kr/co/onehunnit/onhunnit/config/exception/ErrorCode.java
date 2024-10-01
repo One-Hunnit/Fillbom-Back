@@ -16,6 +16,9 @@ public enum ErrorCode {
 	UNSUPPORTED_TOKEN(401, "변조된 토큰입니다.", 1006),
 	ACCESS_DENIED(401, "권한이 없습니다.", 1007),
 	NO_INFO(401, "토큰에 해당하는 정보가 없습니다.", 1008),
+	FAILED_TO_RETRIEVE_KAKAO_ACCESS_TOKEN(401, "카카오로부터 AccessToken 발급에 실패했습니다.", 1009),
+	RESPONSE_CODE_ERROR(401, "인가 코드 요청에 따른 응답 코드가 200이 아닙니다.", 1010),
+	FAILED_TO_RETRIEVE_KAKAO_USER_INFO(401, "카카오로부터 유저 정보 발급에 실패했습니다.", 1011),
 	;
 
 
