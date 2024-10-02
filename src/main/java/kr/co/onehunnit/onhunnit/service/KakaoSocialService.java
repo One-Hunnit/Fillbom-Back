@@ -15,7 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import kr.co.onehunnit.onhunnit.KakaoProperties;
+import kr.co.onehunnit.onhunnit.domain.account.web.KakaoProperties;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

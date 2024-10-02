@@ -1,4 +1,4 @@
-package kr.co.onehunnit.onhunnit;
+package kr.co.onehunnit.onhunnit.domain.account.web;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
