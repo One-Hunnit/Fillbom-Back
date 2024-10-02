@@ -31,6 +31,7 @@ public class OAuthService {
 
 	public TokenInfoDto kakaoOAuthLogin(String authorizationCode) {
 		String kakaoAccessToken = kakaoSocialService.getKakaoAccessToken(authorizationCode);
+		//ToDo
 		HashMap<String, Object> kakaoUserInfo = kakaoSocialService.getKakaoUserInfo(kakaoAccessToken);
 		String userNickname = kakaoUserInfo.get("nickname").toString();
 

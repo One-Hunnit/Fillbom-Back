@@ -17,6 +17,7 @@ public class AccountService {
 
 	private final AccountRepository accountRepository;
 
+	//ToDo
 	public Long signUp(AccountRequestDto.SignUp requestDto) {
 		if (accountRepository.existsByEmail(requestDto.getEmail())) {
 			throw new ApiException(ErrorCode.ACCOUNT_DUPLICATED_ERROR);
