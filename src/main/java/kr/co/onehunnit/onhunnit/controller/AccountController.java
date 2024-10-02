@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/accounts")
 @Validated
-//Todo
+//Todo /api/accounts/me jwt를 가지고 인증된 사용자의 정보 가져오는 api 필요
 public class AccountController {
 
 	private final AccountService accountService;

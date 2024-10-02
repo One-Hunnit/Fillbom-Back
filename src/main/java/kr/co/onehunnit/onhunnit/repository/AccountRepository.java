@@ -10,7 +10,7 @@ import kr.co.onehunnit.onhunnit.domain.account.Account;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-	//ToDo
+	//ToDo provider로 가져오는 메서드 필요
 	boolean existsByEmail(String email);
 
 	Optional<Account> findByNickname(String nickname);

@@ -17,7 +17,7 @@ public class AccountService {
 
 	private final AccountRepository accountRepository;
 
-	//ToDo
+	//ToDo 회원가입 명세서에 맞게 수정
 	public Long signUp(AccountRequestDto.SignUp requestDto) {
 		if (accountRepository.existsByEmail(requestDto.getEmail())) {
 			throw new ApiException(ErrorCode.ACCOUNT_DUPLICATED_ERROR);
