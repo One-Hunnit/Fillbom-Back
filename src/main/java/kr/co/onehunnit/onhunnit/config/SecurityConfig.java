@@ -4,23 +4,34 @@ import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kr.co.onehunnit.onhunnit.config.jwt.JwtAccessDeniedHandler;
+import kr.co.onehunnit.onhunnit.config.jwt.JwtAuthenticationEntryPoint;
+import kr.co.onehunnit.onhunnit.config.jwt.JwtAuthenticationFilter;
+import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+	private final JwtTokenProvider jwtTokenProvider;
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,7 +40,7 @@ public class SecurityConfig {
 				@Override
 				public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 					CorsConfiguration config = new CorsConfiguration();
-					config.setAllowedOrigins(Collections.singletonList("*"));
+					config.setAllowedOrigins(Collections.singletonList("*")); //테스트를 위해 일단 전체 허용
 					config.setAllowedMethods(Collections.singletonList("*"));
 					config.setAllowCredentials(true);
 					config.setAllowedHeaders(Collections.singletonList("*"));
@@ -37,20 +48,23 @@ public class SecurityConfig {
 					return config;
 				}
 			}))
-			// .exceptionHandling(exception -> exception
-			// 	.accessDeniedHandler(jwtAccessDeniedHandler)
-			// 	.authenticationEntryPoint(jwtAuthenticationEntryPoint)) //예외처리
+			.csrf(AbstractHttpConfigurer::disable)
+			 .exceptionHandling(exception -> exception
+			 	.accessDeniedHandler(jwtAccessDeniedHandler)
+			 	.authenticationEntryPoint(jwtAuthenticationEntryPoint))
 
 			.sessionManagement(session -> session
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 사용 안함
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-			// .authorizeHttpRequests(request -> request
-				// .requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-				// .requestMatchers("/api/user/login").permitAll()
-				// .requestMatchers("/api/user/join").permitAll()
-				// .anyRequest().authenticated()) //나머지 요청은 인증 필요
+			.authorizeHttpRequests(request -> request
+				.requestMatchers("/api/oauth/refresh-token").permitAll()
+				.requestMatchers("/api/oauth/kakao").permitAll()
+				.requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+				.requestMatchers("/api/user/sign-up").permitAll()
+				.requestMatchers("/api/user/sign-in").permitAll()
+				.anyRequest().authenticated()) //나머지 요청은 인증 필요
 
-			// .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 		;
 
 		return http.build();
