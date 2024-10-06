@@ -57,11 +57,11 @@ public class SecurityConfig {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
 			.authorizeHttpRequests(request -> request
-				.requestMatchers("/api/oauth/refresh-token").permitAll()
-				.requestMatchers("/api/oauth/kakao").permitAll()
+				.requestMatchers("/oauth/refresh-token").permitAll()
+				.requestMatchers("/oauth/kakao").permitAll()
 				.requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-				.requestMatchers("/api/user/sign-up").permitAll()
-				.requestMatchers("/api/user/sign-in").permitAll()
+				.requestMatchers("/user/sign-up").permitAll()
+				.requestMatchers("/user/sign-in").permitAll()
 				.anyRequest().authenticated()) //나머지 요청은 인증 필요
 
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

@@ -30,7 +30,7 @@ public class SwaggerConfig {
 
 	private Info apiInfo() {
 		return new Info()
-			.title("PilBom API Document")
+			.title("FillBom API Document")
 			.description("필봄 API 문서")
 			.version("1.0.0");
 	}
