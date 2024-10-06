@@ -11,8 +11,11 @@ public enum ErrorCode {
 	ACCOUNT_DATA_ERROR(400, "양식에 맞는 값을 입력해주세요.", 418),
 	ACCOUNT_DUPLICATED_ERROR(400, "이미 존재하는 이메일입니다.", 419),
 
+	NOT_EXIST_CAREGIVER(400, "보호자 정보가 존재하지 않습니다.", 601),
 
+	NOT_EXIST_PATIENT(400, "환자 정보가 존재하지 않습니다.", 701),
 
+	NOT_EXIST_ACCOUNT(400, "계정 정보가 존재하지 않습니다.", 801),
 
 	INVALID_TOKEN(401, "유효하지 않은 토큰입니다.", 1001),
 	UNKNOWN_ERROR(401, "토큰이 존재하지 않습니다.", 1002),
@@ -25,6 +28,7 @@ public enum ErrorCode {
 	FAILED_TO_RETRIEVE_KAKAO_ACCESS_TOKEN(401, "카카오로부터 AccessToken 발급에 실패했습니다.", 1009),
 	RESPONSE_CODE_ERROR(401, "인가 코드 요청에 따른 응답 코드가 200이 아닙니다.", 1010),
 	FAILED_TO_RETRIEVE_KAKAO_USER_INFO(401, "카카오로부터 유저 정보 발급에 실패했습니다.", 1011),
+	NO_TOKEN_ACCOUNT(401, "토큰에 해당하는 계정 정보가 없습니다.", 1012),
 	;
 
 

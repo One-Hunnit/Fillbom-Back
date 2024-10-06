@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
+import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.dto.account.AccountRequestDto;
 import kr.co.onehunnit.onhunnit.repository.AccountRepository;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class AccountService {
 
 	private final AccountRepository accountRepository;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	//ToDo 회원가입 명세서에 맞게 수정
 	public Long signUp(AccountRequestDto.SignUp requestDto) {
@@ -31,4 +33,9 @@ public class AccountService {
 
 		return accountRepository.save(account).getId();
 	}
+
+	public Account getAccountByToken(String accessToken) {
+		return accountRepository.findByNickname(jwtTokenProvider.extractUsernameFromJwt(accessToken)).orElseThrow(() -> new ApiException(ErrorCode.NO_TOKEN_ACCOUNT));
+	}
+
 }
