@@ -1,7 +1,8 @@
 package kr.co.onehunnit.onhunnit.domain.account;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +25,10 @@ public class Account extends BaseTimeEntity {
 
 	private String email;
 
-	private SocialService social_name;
+	@Enumerated(value = EnumType.STRING)
+	private Provider provider;
+
+	private String profile_image;
 
 	private String name;
 
