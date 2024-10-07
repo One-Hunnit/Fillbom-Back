@@ -14,7 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -26,6 +25,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
+import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtTokenProvider {
 
 	private final Key key;
-	//ToDo 만료 기간 수정 1시간 -> 일주일
-	private final int ACCESSTOKEN_EXPIRATION_TIME = 1000 * 60 * 60; //1시간
+	private final int ACCESSTOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; //일주일
 	private final int REFRESHTOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 21;
 
 	public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
@@ -43,8 +42,8 @@ public class JwtTokenProvider {
 	}
 
 	public TokenInfoDto generateToken(Authentication authentication) {
-		String accessToken = createAccessToken(authentication);
-		String refreshToken = createRefreshToken(authentication);
+		String accessToken = createToken(authentication, ACCESSTOKEN_EXPIRATION_TIME);
+		String refreshToken = createToken(authentication, REFRESHTOKEN_EXPIRATION_TIME);
 
 		return TokenInfoDto.builder()
 			.grantType("Bearer")
@@ -59,28 +58,19 @@ public class JwtTokenProvider {
 			.collect(Collectors.joining(","));
 	}
 
-	private String createAccessToken(Authentication authentication) {
-		long now = (new Date()).getTime();
-		Date accessTokenExpiration = new Date(now + ACCESSTOKEN_EXPIRATION_TIME); //1시간
+	private String createToken(Authentication authentication, int expirationTime) {
+		Date tokenExpiration = new Date(getNowTime() + expirationTime);
 
 		return Jwts.builder()
 			.setSubject(authentication.getName())
 			.claim("auth", getAuthorities(authentication))
-			.setExpiration(accessTokenExpiration)
+			.setExpiration(tokenExpiration)
 			.signWith(key, SignatureAlgorithm.HS256)
 			.compact();
 	}
 
-	private String createRefreshToken(Authentication authentication) {
-		long now = (new Date()).getTime();
-		Date refreshTokenExpiration = new Date(now + REFRESHTOKEN_EXPIRATION_TIME); //21일
-
-		return Jwts.builder()
-			.setSubject(authentication.getName())
-			.claim("auth", getAuthorities(authentication))
-			.setExpiration(refreshTokenExpiration)
-			.signWith(key, SignatureAlgorithm.HS256)
-			.compact();
+	public long getNowTime() {
+		return (new Date()).getTime();
 	}
 
 	public Authentication getAuthentication(String accessToken) {
@@ -95,7 +85,10 @@ public class JwtTokenProvider {
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 
-		UserDetails principal = new User(claims.getSubject(), "", authorities);
+		String[] subjectParts = claims.getSubject().split(",");
+		String email = subjectParts[0];
+
+		UserDetails principal = new User(email, "", authorities);
 		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 	}
 
@@ -114,11 +107,16 @@ public class JwtTokenProvider {
 		}
 	}
 
-	public String extractUsernameFromJwt(String token) {
+	public TokenAccountInfoDto extractTokenAccountInfoFromJwt(String token) {
 		if (token.startsWith("Bearer ")) {
 			String resolvedToken = token.substring(7).trim();
 			Claims claims = parseClaims(resolvedToken);
-			return claims.getSubject();
+			String[] subjectParts = claims.getSubject().split(",");
+			if (subjectParts.length > 1) {
+				String email = subjectParts[0];
+				String provider = subjectParts[1];
+				return TokenAccountInfoDto.builder().email(email).provider(provider).build();
+			}
 		}
 
 		return null;

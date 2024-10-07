@@ -24,8 +24,8 @@ public class OAuthController {
 	private final OAuthService oAuthService;
 
 	@GetMapping("/kakao")
-	public ResponseDto<TokenInfoDto> kakaoCallback(@RequestParam(name = "authorizationCode") String code) {
-		return ResponseUtil.SUCCESS("카카오 로그인에 성공하였습니다.", oAuthService.kakaoOAuthLogin(code));
+	public ResponseDto<TokenInfoDto> kakaoLogin(@RequestParam(name = "idToken") String idToken) {
+		return ResponseUtil.SUCCESS("카카오 로그인에 성공하였습니다.", oAuthService.kakaoOAuthLogin(idToken));
 	}
 
 	@PostMapping("/refresh-token")
