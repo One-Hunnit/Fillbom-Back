@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import kr.co.onehunnit.onhunnit.domain.global.BaseTimeEntity;
+import kr.co.onehunnit.onhunnit.dto.account.AccountRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,4 +39,24 @@ public class Account extends BaseTimeEntity {
 
 	private String phone;
 
+	@Enumerated(value = EnumType.STRING)
+	private Gender gender;
+
+	private String birthday;
+
+	public void signUp(String name, int age, String phone, Gender gender, String birthday) {
+		this.name = name;
+		this.age = age;
+		this.phone = phone;
+		this.gender = gender;
+		this.birthday = birthday;
+	}
+
+	public void signUp(AccountRequestDto.SignUp requestDto) {
+		this.name = requestDto.getName();
+		this.age = requestDto.getAge();
+		this.phone = requestDto.getPhone();
+		this.gender = Gender.valueOf(requestDto.getGender());
+		this.birthday = requestDto.getBirthday();
+	}
 }

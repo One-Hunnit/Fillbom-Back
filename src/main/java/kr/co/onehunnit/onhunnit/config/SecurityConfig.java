@@ -4,7 +4,6 @@ import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,8 +59,8 @@ public class SecurityConfig {
 				.requestMatchers("/oauth/refresh-token").permitAll()
 				.requestMatchers("/oauth/kakao").permitAll()
 				.requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-				.requestMatchers("/user/sign-up").permitAll()
-				.requestMatchers("/user/sign-in").permitAll()
+				.requestMatchers("/accounts/sign-up").permitAll()
+				.requestMatchers("/accounts/sign-in").permitAll()
 				.anyRequest().authenticated()) //나머지 요청은 인증 필요
 
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

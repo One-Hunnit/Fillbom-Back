@@ -2,7 +2,6 @@ package kr.co.onehunnit.onhunnit.dto.account;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 public class AccountRequestDto {
 
@@ -10,8 +9,12 @@ public class AccountRequestDto {
 	@Builder
 	public static class SignUp {
 		private String email;
+		private String provider;
 		private String name;
-		private String phoneNumber;
+		private int age;
+		private String gender;
+		private String phone;
+		private String birthday;
 	}
 
 }
