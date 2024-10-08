@@ -22,12 +22,14 @@ public class PatientService {
 	private final PatientRepository patientRepository;
 	private final AccountService accountService;
 	private final CaregiverRepository caregiverRepository;
-	private final PatientCaregiverRepository patientCaregiverRepositㅔㅁory;
+	private final PatientCaregiverRepository patientCaregiverRepository;
 
 	public Long registerCaregiver(String accessToken, Long caregiverId) {
 		Account account = accountService.getAccountByToken(accessToken);
-		Patient patient = patientRepository.findByAccount_Id(account.getId()).orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
-		Caregiver caregiver = caregiverRepository.findById(caregiverId).orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
+		Patient patient = patientRepository.findByAccount_Id(account.getId())
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
+		Caregiver caregiver = caregiverRepository.findById(caregiverId)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
 
 		PatientCaregiver patientCaregiver = new PatientCaregiver().builder()
 			.patient(patient)
