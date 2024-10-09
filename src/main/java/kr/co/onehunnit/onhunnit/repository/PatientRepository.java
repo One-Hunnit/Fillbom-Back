@@ -12,4 +12,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
 	Optional<Patient> findByAccount_Id(Long id);
 
+	boolean existsByAccount_Id(Long id);
+
 }

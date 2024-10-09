@@ -107,7 +107,7 @@ public class JwtTokenProvider {
 		}
 	}
 
-	public TokenAccountInfoDto extractTokenAccountInfoFromJwt(String token) {
+	public TokenAccountInfoDto.TokenInfo extractTokenInfoFromJwt(String token) {
 		if (token.startsWith("Bearer ")) {
 			String resolvedToken = token.substring(7).trim();
 			Claims claims = parseClaims(resolvedToken);
@@ -115,7 +115,7 @@ public class JwtTokenProvider {
 			if (subjectParts.length > 1) {
 				String email = subjectParts[0];
 				String provider = subjectParts[1];
-				return TokenAccountInfoDto.builder().email(email).provider(provider).build();
+				return TokenAccountInfoDto.TokenInfo.builder().email(email).provider(provider).build();
 			}
 		}
 

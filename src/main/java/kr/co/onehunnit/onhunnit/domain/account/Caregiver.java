@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import kr.co.onehunnit.onhunnit.domain.global.BaseTimeEntity;
+import kr.co.onehunnit.onhunnit.domain.global.Role;
 import kr.co.onehunnit.onhunnit.domain.patient_Caregiver.PatientCaregiver;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Entity
-public class Caregiver extends BaseTimeEntity {
+public class Caregiver extends BaseTimeEntity implements Role {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,4 +45,8 @@ public class Caregiver extends BaseTimeEntity {
 		this.account = account;
 	}
 
+	@Override
+	public String getRoleName() {
+		return "CAREGIVER";
+	}
 }
