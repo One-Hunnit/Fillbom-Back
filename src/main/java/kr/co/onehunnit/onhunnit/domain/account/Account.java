@@ -44,13 +44,8 @@ public class Account extends BaseTimeEntity {
 
 	private String birthday;
 
-	public void signUp(String name, int age, String phone, Gender gender, String birthday) {
-		this.name = name;
-		this.age = age;
-		this.phone = phone;
-		this.gender = gender;
-		this.birthday = birthday;
-	}
+	@Enumerated(value = EnumType.STRING)
+	private Status status;
 
 	public void signUp(AccountRequestDto.SignUp requestDto) {
 		this.name = requestDto.getName();
@@ -58,5 +53,9 @@ public class Account extends BaseTimeEntity {
 		this.phone = requestDto.getPhone();
 		this.gender = Gender.valueOf(requestDto.getGender());
 		this.birthday = requestDto.getBirthday();
+	}
+
+	public void updateStatus(Status status) {
+		this.status = status;
 	}
 }

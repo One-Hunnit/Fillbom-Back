@@ -16,6 +16,7 @@ import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
+import kr.co.onehunnit.onhunnit.domain.account.Status;
 import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.dto.token.RefreshTokenDto;
 import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
@@ -50,19 +51,20 @@ public class OAuthService {
 			.email(email)
 			.nickname(nickname)
 			.profile_image(picture)
+			.status(Status.SIGNUP_PENDING)
 			.build();
 		accountRepository.save(newAccount);
 	}
 
-	public TokenInfoDto reGenerateAccessToken(RefreshTokenDto refreshTokenDto) {
+	public TokenInfoDto 	reGenerateAccessToken(RefreshTokenDto refreshTokenDto) {
 		String refreshToken = refreshTokenDto.getRefreshToken();
 		if (!jwtTokenProvider.validateToken(refreshToken.substring(7).trim())) {
 			throw new ApiException(ErrorCode.INVALID_TOKEN);
 		}
 
-		TokenAccountInfoDto tokenAccountInfoDto = jwtTokenProvider.extractTokenAccountInfoFromJwt(refreshToken);
-		String email = tokenAccountInfoDto.getEmail();
-		String provider = tokenAccountInfoDto.getProvider();
+		TokenAccountInfoDto.TokenInfo tokenInfoDto = jwtTokenProvider.extractTokenInfoFromJwt(refreshToken);
+		String email = tokenInfoDto.getEmail();
+		String provider = tokenInfoDto.getProvider();
 		return jwtTokenProvider.generateToken(getAuthentication(email, provider));
 	}
 
