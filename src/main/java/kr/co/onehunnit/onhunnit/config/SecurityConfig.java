@@ -57,6 +57,8 @@ public class SecurityConfig {
 
 			.authorizeHttpRequests(request -> request
 				.requestMatchers("/oauth/refresh-token").permitAll()
+				.requestMatchers("/district").permitAll()
+				.requestMatchers("/test/**").permitAll()
 				.requestMatchers("/oauth/kakao").permitAll()
 				.requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 				.requestMatchers("/accounts/sign-up").permitAll()
