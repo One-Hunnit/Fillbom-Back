@@ -38,6 +38,7 @@ public class Caregiver extends BaseTimeEntity implements Role {
 	@JoinColumn(name = "account_id")
 	private Account account;
 
+	@Builder.Default
 	@OneToMany(mappedBy = "caregiver")
 	private List<PatientCaregiver> patientCaregiverList = new ArrayList<>();
 
