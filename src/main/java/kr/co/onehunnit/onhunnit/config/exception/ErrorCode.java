@@ -20,6 +20,8 @@ public enum ErrorCode {
 
 	NOT_EXIST_DISTRICT(400, "행정 구역 정보가 존재하지 않습니다.", 901),
 
+	NOT_EXITS_DIARY(400, "일기 정보가 존재하지 않습니다.", 1001),
+
 	INVALID_TOKEN(401, "유효하지 않은 토큰입니다.", 1001),
 	UNKNOWN_ERROR(401, "토큰이 존재하지 않습니다.", 1002),
 	WRONG_TYPE_TOKEN(401, "변조된 토큰입니다.", 1003),
@@ -32,6 +34,7 @@ public enum ErrorCode {
 	RESPONSE_CODE_ERROR(401, "인가 코드 요청에 따른 응답 코드가 200이 아닙니다.", 1010),
 	FAILED_TO_RETRIEVE_KAKAO_USER_INFO(401, "카카오로부터 유저 정보 발급에 실패했습니다.", 1011),
 	NO_TOKEN_ACCOUNT(401, "토큰에 해당하는 계정 정보가 없습니다.", 1012),
+	UNAUTHORIZED_ACCESS(401, "권한이 없는 환자의 정보를 조회할 수 없습니다.", 1013),
 	;
 
 

@@ -62,6 +62,9 @@ dependencies {
     // Hibernate Spatial
     implementation 'org.hibernate:hibernate-spatial:6.0.0.Final'
 
+    //AWS S3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.300'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
