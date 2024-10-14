@@ -11,6 +11,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.WKTReader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -21,18 +22,24 @@ import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.domain.district.District;
 import kr.co.onehunnit.onhunnit.domain.district.dbmapping.Feature;
 import kr.co.onehunnit.onhunnit.domain.district.dbmapping.FeatureCollection;
+import kr.co.onehunnit.onhunnit.domain.patient.Patient;
+import kr.co.onehunnit.onhunnit.domain.safezone.SafeZone;
 import kr.co.onehunnit.onhunnit.dto.district.DistrictCoordinateResponseDto;
 import kr.co.onehunnit.onhunnit.dto.district.DistrictResponseDto;
 import kr.co.onehunnit.onhunnit.repository.DistrictRepository;
+import kr.co.onehunnit.onhunnit.repository.PatientRepository;
+import kr.co.onehunnit.onhunnit.repository.SafeZoneRepository;
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class DistrictService {
 
-	private final DistrictRepository districtsRepository;
 	private final AccountService accountService;
 	private final DistrictRepository districtRepository;
+	private final PatientRepository patientRepository;
+	private final SafeZoneRepository safeZoneRepository;
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final GeometryFactory geometryFactory = new GeometryFactory();
@@ -50,7 +57,7 @@ public class DistrictService {
 				.geom((MultiPolygon)new WKTReader(geometryFactory).read(wkt))
 				.build();
 
-			districtsRepository.save(districts);
+			districtRepository.save(districts);
 		}
 	}
 
@@ -78,6 +85,7 @@ public class DistrictService {
 		return wktBuilder.toString();
 	}
 
+	@Transactional(readOnly = true)
 	public List<DistrictResponseDto> searchDistricts(String searchWord) {
 		List<District> searchedDistrictList = districtRepository.findAllByAdmNmContainingOrderById(searchWord);
 		return convertoToDistrictResponseDtoList(searchedDistrictList);
@@ -95,7 +103,7 @@ public class DistrictService {
 		return districtResponseDtoList;
 	}
 
-	public String convertMultiPolygonToGeoJson(MultiPolygon multiPolygon) {
+	private String convertMultiPolygonToGeoJson(MultiPolygon multiPolygon) {
 		ObjectNode geoJson = objectMapper.createObjectNode();
 		geoJson.put("type", "MultiPolygon");
 
@@ -130,9 +138,10 @@ public class DistrictService {
 		return geoJson.toString();
 	}
 
+	@Transactional(readOnly = true)
 	public DistrictCoordinateResponseDto getDistrictCoordinate(String admCd) {
-		District district = districtRepository.findByAdmCd(admCd).orElseThrow(
-			() -> new ApiException(ErrorCode.NOT_EXIST_DISTRICT));
+		District district = districtRepository.findByAdmCd(admCd)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_DISTRICT));
 
 		return DistrictCoordinateResponseDto.builder()
 			.admNm(district.getAdmNm())
@@ -141,8 +150,9 @@ public class DistrictService {
 			.build();
 	}
 
+	@Transactional(readOnly = true)
 	public boolean isPointInPolygon(String admCd, double longitude, double latitude) {
-		District district = districtsRepository.findByAdmCd(admCd).orElseThrow(
+		District district = districtRepository.findByAdmCd(admCd).orElseThrow(
 			() -> new ApiException(ErrorCode.NOT_EXIST_DISTRICT));
 
 		if (district != null && district.getGeom() != null) {
@@ -152,6 +162,28 @@ public class DistrictService {
 		}
 
 		throw new ApiException(ErrorCode.NOT_EXIST_DISTRICT);
+	}
+
+	// @Transactional(readOnly = true)
+	public boolean isPatientPointInPolygon(Long patientId, double longitude, double latitude) {
+		Patient patient = patientRepository.findById(patientId)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
+
+		List<SafeZone> safeZoneList = safeZoneRepository.findAllByPatientOrderByCreatedAtDesc(patient);
+		for (SafeZone safeZone : safeZoneList) {
+			District district = districtRepository.findDistrictById(safeZone.getDistrict().getId())
+				.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_DISTRICT));
+
+			if (district != null && district.getGeom() != null) {
+				MultiPolygon multiPolygon = district.getGeom();
+				Point point = geometryFactory.createPoint(new org.locationtech.jts.geom.Coordinate(longitude, latitude));
+				if (multiPolygon.contains(point)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }

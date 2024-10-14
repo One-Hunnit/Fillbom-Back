@@ -14,4 +14,7 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
 	Optional<District> findByAdmCd(String admCd);
 
 	List<District> findAllByAdmNmContainingOrderById(String admNm);
+
+	Optional<District> findDistrictById(Long id);
+
 }
