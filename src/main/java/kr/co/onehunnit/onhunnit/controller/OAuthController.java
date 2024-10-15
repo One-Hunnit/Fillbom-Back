@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.onehunnit.onhunnit.config.response.ResponseDto;
 import kr.co.onehunnit.onhunnit.config.response.ResponseUtil;
+import kr.co.onehunnit.onhunnit.dto.token.IdTokenDto;
 import kr.co.onehunnit.onhunnit.dto.token.RefreshTokenDto;
 import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
 import kr.co.onehunnit.onhunnit.service.OAuthService;
@@ -27,9 +28,9 @@ public class OAuthController {
 	private final OAuthService oAuthService;
 
 	@Operation(summary = "카카오 소셜로그인")
-	@GetMapping("/kakao")
-	public ResponseDto<TokenInfoDto> kakaoLogin(@RequestParam(name = "idToken") String idToken) {
-		return ResponseUtil.SUCCESS("카카오 로그인에 성공하였습니다.", oAuthService.kakaoOAuthLogin(idToken));
+	@PostMapping("/kakao")
+	public ResponseDto<TokenInfoDto> kakaoLogin(@RequestBody IdTokenDto idTokenDto) {
+		return ResponseUtil.SUCCESS("카카오 로그인에 성공하였습니다.", oAuthService.kakaoOAuthLogin(idTokenDto.getIdToken()));
 	}
 
 	@Operation(summary = "토큰 재발급", description = "리프레시 토큰 앞에 토큰 타입 'Bearer ' 필요")
