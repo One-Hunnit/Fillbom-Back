@@ -22,14 +22,30 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		// String id = session.getId();  //메시지를 보낸 아이디
 		JSONParser jsonParser = new JSONParser();
-		Object obj = jsonParser.parse(message.getPayload());
-		JSONObject jsonObject = (JSONObject)obj;
+		Object obj;
 
-		Long patientId = Long.parseLong(jsonObject.get("patientId").toString());
-		double longitude = Double.parseDouble(jsonObject.get("longitude").toString());
-		double latitude = Double.parseDouble(jsonObject.get("latitude").toString());
+		try {
+			obj = jsonParser.parse(message.getPayload());
+		} catch (Exception e) {
+			throw new IllegalArgumentException("메시지 형식이 올바르지 않습니다.");
+		}
+
+		JSONObject jsonObject = (JSONObject)obj;
+		if (isNotContainAllField(jsonObject)) {
+			throw new IllegalArgumentException("메시지 필드가 누락되었습니다: patient, longitude, latitude.");
+		}
+
+		Long patientId;
+		double longitude;
+		double latitude;
+		try {
+			patientId = Long.parseLong(jsonObject.get("patientId").toString());
+			longitude = Double.parseDouble(jsonObject.get("longitude").toString());
+			latitude = Double.parseDouble(jsonObject.get("latitude").toString());
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException("메시지 필드의 형식이 올바르지 않습니다.");
+		}
 
 		String responseMessage = isInside(patientId, longitude, latitude);
 		session.sendMessage(new TextMessage(responseMessage));
@@ -40,6 +56,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
 			.patientId(patientId)
 			.build();
 		locationRepository.save(location);
+	}
+
+	boolean isNotContainAllField(JSONObject jsonObject) {
+		if (jsonObject.containsKey("patientId") && jsonObject.containsKey("longitude") && jsonObject.containsKey("latitude")) {
+			return false;
+		}
+		return true;
 	}
 
 	private String isInside(Long patientId, double longitude, double latitude) {

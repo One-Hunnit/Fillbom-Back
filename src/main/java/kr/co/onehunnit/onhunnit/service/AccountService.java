@@ -11,6 +11,7 @@ import kr.co.onehunnit.onhunnit.domain.account.Provider;
 import kr.co.onehunnit.onhunnit.domain.account.Status;
 import kr.co.onehunnit.onhunnit.domain.global.Role;
 import kr.co.onehunnit.onhunnit.dto.account.AccountRequestDto;
+import kr.co.onehunnit.onhunnit.dto.account.AccountResponseDto;
 import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.repository.AccountRepository;
 import kr.co.onehunnit.onhunnit.repository.CaregiverRepository;
@@ -26,6 +27,7 @@ public class AccountService {
 	private final PatientRepository patientRepository;
 	private final CaregiverRepository caregiverRepository;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final LocationService locationService;
 
 	public Long signUp(AccountRequestDto.SignUp requestDto) {
 		String email = requestDto.getEmail();
@@ -36,6 +38,27 @@ public class AccountService {
 		account.signUp(requestDto);
 		account.updateStatus(Status.REGISTER_INFO_PENDING);
 		return account.getId();
+	}
+
+	public AccountResponseDto.Info updateUserInfo(String accessToken, AccountRequestDto.Update updateDto) {
+		Account account = getAccountByToken(accessToken);
+		account.update(updateDto);
+		return AccountResponseDto.Info.builder()
+			.id(account.getId())
+			.email(account.getEmail())
+			.phone(account.getPhone())
+			.profile_image(account.getProfile_image())
+			.nickname(account.getNickname())
+			.birthday(account.getBirthday())
+			.gender(account.getGender())
+			.status(account.getStatus())
+			.build();
+	}
+
+	public void deleteAccount(String accessToken) {
+		Account account = getAccountByToken(accessToken);
+		accountRepository.delete(account);
+		locationService.deletePatientLocations(account.getPatient().getId());
 	}
 
 	public Account getAccountByToken(String accessToken) {
