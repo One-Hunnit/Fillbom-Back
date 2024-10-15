@@ -14,6 +14,9 @@ import lombok.Getter;
 @Getter
 public class TokenAccountInfoDto {
 
+	@Schema(description = "계정 인덱스")
+	private Long id;
+
 	@Schema(description = "이메일")
 	private String email;
 
@@ -49,6 +52,7 @@ public class TokenAccountInfoDto {
 
 	@Builder
 	public TokenAccountInfoDto(Account account, Role role) {
+		this.id = account.getId();
 		this.email = account.getEmail();
 		this.provider = account.getProvider();
 		this.profile_image = account.getProfile_image();
