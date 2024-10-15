@@ -3,6 +3,7 @@ package kr.co.onehunnit.onhunnit.domain.account;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,7 +40,7 @@ public class Caregiver extends BaseTimeEntity implements Role {
 	private Account account;
 
 	@Builder.Default
-	@OneToMany(mappedBy = "caregiver")
+	@OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PatientCaregiver> patientCaregiverList = new ArrayList<>();
 
 	public void setAccount(Account account) {

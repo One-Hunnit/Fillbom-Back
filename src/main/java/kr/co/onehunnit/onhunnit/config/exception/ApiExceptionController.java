@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
-@RestControllerAdvice(basePackages = "com.moyeota.moyeotaproject.controller")
+@RestControllerAdvice(basePackages = "kr.co.onehunnit.onhunnit.controller")
 public class ApiExceptionController {
 
 	@ExceptionHandler(ApiException.class)

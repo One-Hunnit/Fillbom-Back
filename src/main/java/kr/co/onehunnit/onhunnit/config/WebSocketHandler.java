@@ -1,5 +1,7 @@
 package kr.co.onehunnit.onhunnit.config;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -19,17 +21,31 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
 	private final LocationRepository locationRepository;
 	private final DistrictService districtService;
+	private final JSONParser jsonParser = new JSONParser();
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		// String id = session.getId();  //메시지를 보낸 아이디
-		JSONParser jsonParser = new JSONParser();
-		Object obj = jsonParser.parse(message.getPayload());
-		JSONObject jsonObject = (JSONObject)obj;
+		JSONObject jsonObject = parseMessage(session, message.getPayload());
+		if (jsonObject == null) {
+			return;
+		}
 
-		Long patientId = Long.parseLong(jsonObject.get("patientId").toString());
-		double longitude = Double.parseDouble(jsonObject.get("longitude").toString());
-		double latitude = Double.parseDouble(jsonObject.get("latitude").toString());
+		if (!isContainAllField(jsonObject)) {
+			session.sendMessage(new TextMessage("메시지 필드가 누락되었습니다: patientId, longitude, latitude"));
+			return;
+		}
+
+		Long patientId;
+		double longitude;
+		double latitude;
+		try {
+			patientId = Long.parseLong(jsonObject.get("patientId").toString());
+			longitude = Double.parseDouble(jsonObject.get("longitude").toString());
+			latitude = Double.parseDouble(jsonObject.get("latitude").toString());
+		} catch (NumberFormatException e) {
+			session.sendMessage(new TextMessage("메시지 필드의 형식이 올바르지 않습니다."));
+			return;
+		}
 
 		String responseMessage = isInside(patientId, longitude, latitude);
 		session.sendMessage(new TextMessage(responseMessage));
@@ -40,6 +56,20 @@ public class WebSocketHandler extends TextWebSocketHandler {
 			.patientId(patientId)
 			.build();
 		locationRepository.save(location);
+	}
+
+	private JSONObject parseMessage(WebSocketSession session, String payload) throws IOException {
+		try {
+			return (JSONObject)jsonParser.parse(payload);
+		} catch (Exception e) {
+			session.sendMessage(new TextMessage("메시지 형식이 올바르지 않습니다."));
+			return null;
+		}
+	}
+
+	boolean isContainAllField(JSONObject jsonObject) {
+		return jsonObject.containsKey("patientId") && jsonObject.containsKey("longitude") && jsonObject.containsKey(
+			"latitude");
 	}
 
 	private String isInside(Long patientId, double longitude, double latitude) {

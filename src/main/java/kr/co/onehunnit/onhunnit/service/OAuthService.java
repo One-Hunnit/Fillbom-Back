@@ -56,7 +56,7 @@ public class OAuthService {
 		accountRepository.save(newAccount);
 	}
 
-	public TokenInfoDto 	reGenerateAccessToken(RefreshTokenDto refreshTokenDto) {
+	public TokenInfoDto reGenerateAccessToken(RefreshTokenDto refreshTokenDto) {
 		String refreshToken = refreshTokenDto.getRefreshToken();
 		if (!jwtTokenProvider.validateToken(refreshToken.substring(7).trim())) {
 			throw new ApiException(ErrorCode.INVALID_TOKEN);

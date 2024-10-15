@@ -1,12 +1,15 @@
 package kr.co.onehunnit.onhunnit.domain.account;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import kr.co.onehunnit.onhunnit.domain.global.BaseTimeEntity;
+import kr.co.onehunnit.onhunnit.domain.patient.Patient;
 import kr.co.onehunnit.onhunnit.dto.account.AccountRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,12 +50,27 @@ public class Account extends BaseTimeEntity {
 	@Enumerated(value = EnumType.STRING)
 	private Status status;
 
+	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Patient patient;
+
+	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Caregiver caregiver;
+
 	public void signUp(AccountRequestDto.SignUp requestDto) {
 		this.name = requestDto.getName();
 		this.age = requestDto.getAge();
 		this.phone = requestDto.getPhone();
 		this.gender = Gender.valueOf(requestDto.getGender());
 		this.birthday = requestDto.getBirthday();
+	}
+
+	public void update(AccountRequestDto.Update updateDto) {
+		this.nickname = updateDto.getNickname();
+		this.birthday = updateDto.getBirthday();
+		this.profile_image = updateDto.getProfileImage();
+		this.phone = updateDto.getPhone();
+		this.gender = updateDto.getGender();
+		this.status = updateDto.getStatus();
 	}
 
 	public void updateStatus(Status status) {

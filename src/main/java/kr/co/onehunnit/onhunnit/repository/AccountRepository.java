@@ -14,8 +14,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
 	Optional<Account> findByEmailAndProvider(String email, Provider provider);
 
-	boolean existsAccountByEmailAndProvider(String email, Provider provider);
-
 	@Query("select case when count(a) = 0 then true else false end from Account a where a.email = :email and a.provider = :provider")
 	boolean notExistsAccountByEmailAndProvider(String email, Provider provider);
 
