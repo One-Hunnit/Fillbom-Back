@@ -36,9 +36,7 @@ public class Account extends BaseTimeEntity {
 
 	private String name;
 
-	private String nickname;
-
-	private int age;
+	private Integer age;
 
 	private String phone;
 
@@ -66,7 +64,7 @@ public class Account extends BaseTimeEntity {
 	}
 
 	public void update(AccountRequestDto.Update updateDto) {
-		this.nickname = updateDto.getNickname();
+		this.name = updateDto.getName();
 		this.birthday = updateDto.getBirthday();
 		this.profile_image = updateDto.getProfile_image();
 		this.phone = updateDto.getPhone();

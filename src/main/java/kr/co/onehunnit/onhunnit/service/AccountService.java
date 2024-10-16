@@ -48,7 +48,7 @@ public class AccountService {
 			.email(account.getEmail())
 			.phone(account.getPhone())
 			.profile_image(account.getProfile_image())
-			.nickname(account.getNickname())
+			.name(account.getName())
 			.birthday(account.getBirthday())
 			.gender(account.getGender())
 			.status(account.getStatus())
@@ -57,8 +57,10 @@ public class AccountService {
 
 	public void deleteAccount(String accessToken) {
 		Account account = getAccountByToken(accessToken);
+		if (account.getPatient() != null) {
+			locationService.deletePatientLocations(account.getPatient().getId());
+		}
 		accountRepository.delete(account);
-		locationService.deletePatientLocations(account.getPatient().getId());
 	}
 
 	public Account getAccountByToken(String accessToken) {

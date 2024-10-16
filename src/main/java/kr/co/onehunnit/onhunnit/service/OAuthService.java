@@ -49,7 +49,7 @@ public class OAuthService {
 		Account newAccount = Account.builder()
 			.provider(Provider.KAKAO)
 			.email(email)
-			.nickname(nickname)
+			.name(nickname)
 			.profile_image(picture)
 			.status(Status.SIGNUP_PENDING)
 			.build();

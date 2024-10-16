@@ -12,7 +12,7 @@ public class AccountResponseDto {
 	public static class Info {
 		private Long id;
 		private String email;
-		private String nickname;
+		private String name;
 		private String phone;
 		private String profile_image;
 		private String birthday;

@@ -21,7 +21,7 @@ public class AccountRequestDto {
 		private String name;
 
 		@Schema(description = "나이")
-		private int age;
+		private Integer age;
 
 		@Schema(description = "성별(MAN,WOMAN)")
 		private String gender;
@@ -40,7 +40,7 @@ public class AccountRequestDto {
 	@Getter
 	@Builder
 	public static class Update {
-		private String nickname;
+		private String name;
 		private String profile_image;
 		private String phone;
 		private String birthday;
