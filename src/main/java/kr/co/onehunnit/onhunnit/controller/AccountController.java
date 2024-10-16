@@ -34,7 +34,7 @@ public class AccountController {
 
 	@Operation(summary = "회원가입")
 	@PostMapping("/sign-up")
-	public ResponseDto<Long> signUp(@RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
+	public ResponseDto<String> signUp(@RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ApiException(ErrorCode.ACCOUNT_DATA_ERROR);
 		}

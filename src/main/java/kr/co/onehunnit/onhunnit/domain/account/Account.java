@@ -56,18 +56,19 @@ public class Account extends BaseTimeEntity {
 	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Caregiver caregiver;
 
-	public void signUp(AccountRequestDto.SignUp requestDto) {
+	public void signUp(AccountRequestDto.SignUp requestDto, String profile_image) {
 		this.name = requestDto.getName();
 		this.age = requestDto.getAge();
 		this.phone = requestDto.getPhone();
 		this.gender = Gender.valueOf(requestDto.getGender());
 		this.birthday = requestDto.getBirthday();
+		this.profile_image = profile_image;
 	}
 
 	public void update(AccountRequestDto.Update updateDto) {
 		this.nickname = updateDto.getNickname();
 		this.birthday = updateDto.getBirthday();
-		this.profile_image = updateDto.getProfileImage();
+		this.profile_image = updateDto.getProfile_image();
 		this.phone = updateDto.getPhone();
 		this.gender = updateDto.getGender();
 		this.status = updateDto.getStatus();

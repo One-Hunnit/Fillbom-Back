@@ -31,13 +31,17 @@ public class AccountRequestDto {
 
 		@Schema(description = "생년월일", example = "1999.09.13")
 		private String birthday;
+
+		@Schema(description = "프로필이미지 url")
+		private String profile_image;
+
 	}
 
 	@Getter
 	@Builder
 	public static class Update {
 		private String nickname;
-		private String profileImage;
+		private String profile_image;
 		private String phone;
 		private String birthday;
 		private Gender gender;
