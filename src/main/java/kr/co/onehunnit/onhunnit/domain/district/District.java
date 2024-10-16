@@ -11,14 +11,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import kr.co.onehunnit.onhunnit.domain.safezone.SafeZone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "districts")
 @Builder
 @Getter
 @NoArgsConstructor
@@ -32,7 +30,8 @@ public class District {
 	private String admNm;
 	private String admCd;
 
-	@Column(columnDefinition = "geometry(MULTIPOLYGON,4326)")
+	// @Column(columnDefinition = "geometry(MULTIPOLYGON,4326)")
+	@Column(columnDefinition = "GEOMETRY")
 	private MultiPolygon geom;
 
 	@Builder.Default

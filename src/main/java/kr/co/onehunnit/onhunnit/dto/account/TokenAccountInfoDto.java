@@ -1,7 +1,5 @@
 package kr.co.onehunnit.onhunnit.dto.account;
 
-import java.time.format.DecimalStyle;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Gender;
@@ -29,11 +27,8 @@ public class TokenAccountInfoDto {
 	@Schema(description = "이름")
 	private String name;
 
-	@Schema(description = "닉네임")
-	private String nickname;
-
 	@Schema(description = "나이")
-	private int age;
+	private Integer age;
 
 	@Schema(description = "전화번호")
 	private String phone;
@@ -57,7 +52,6 @@ public class TokenAccountInfoDto {
 		this.provider = account.getProvider();
 		this.profile_image = account.getProfile_image();
 		this.name = account.getName();
-		this.nickname = account.getNickname();
 		this.age = account.getAge();
 		this.phone = account.getPhone();
 		this.gender = account.getGender();
