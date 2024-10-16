@@ -63,7 +63,7 @@ public class TokenAccountInfoDto {
 		this.gender = account.getGender();
 		this.birthday = account.getBirthday();
 		this.status = account.getStatus();
-		this.role = role.getRoleName();
+		this.role = (role == null) ? null : role.getRoleName();
 	}
 
 	@Getter
