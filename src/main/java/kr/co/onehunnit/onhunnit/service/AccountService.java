@@ -28,18 +28,16 @@ public class AccountService {
 	private final CaregiverRepository caregiverRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final LocationService locationService;
-	private final ImageService imageUploadService;
 
 	public String signUp(AccountRequestDto.SignUp requestDto) {
 		String email = requestDto.getEmail();
 		Provider provider = Provider.valueOf(requestDto.getProvider());
 		Account account = accountRepository.findByEmailAndProvider(email, provider)
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_EMAIL));
-		String profileImageUrl = imageUploadService.convertUrlToImage(requestDto.getProfile_image());
 
-		account.signUp(requestDto, profileImageUrl);
+		account.signUp(requestDto);
 		account.updateStatus(Status.REGISTER_INFO_PENDING);
-		return profileImageUrl;
+		return requestDto.getProfile_image();
 	}
 
 	public AccountResponseDto.Info updateUserInfo(String accessToken, AccountRequestDto.Update updateDto) {
