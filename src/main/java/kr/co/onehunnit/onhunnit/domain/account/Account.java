@@ -62,12 +62,13 @@ public class Account extends BaseTimeEntity {
 		this.phone = requestDto.getPhone();
 		this.gender = Gender.valueOf(requestDto.getGender());
 		this.birthday = requestDto.getBirthday();
+		this.profile_image = requestDto.getProfile_image();
 	}
 
 	public void update(AccountRequestDto.Update updateDto) {
 		this.nickname = updateDto.getNickname();
 		this.birthday = updateDto.getBirthday();
-		this.profile_image = updateDto.getProfileImage();
+		this.profile_image = updateDto.getProfile_image();
 		this.phone = updateDto.getPhone();
 		this.gender = updateDto.getGender();
 		this.status = updateDto.getStatus();

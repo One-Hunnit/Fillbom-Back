@@ -29,7 +29,7 @@ public class AccountService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final LocationService locationService;
 
-	public Long signUp(AccountRequestDto.SignUp requestDto) {
+	public String signUp(AccountRequestDto.SignUp requestDto) {
 		String email = requestDto.getEmail();
 		Provider provider = Provider.valueOf(requestDto.getProvider());
 		Account account = accountRepository.findByEmailAndProvider(email, provider)
@@ -37,7 +37,7 @@ public class AccountService {
 
 		account.signUp(requestDto);
 		account.updateStatus(Status.REGISTER_INFO_PENDING);
-		return account.getId();
+		return requestDto.getProfile_image();
 	}
 
 	public AccountResponseDto.Info updateUserInfo(String accessToken, AccountRequestDto.Update updateDto) {
