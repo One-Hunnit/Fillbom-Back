@@ -82,7 +82,7 @@ public class AccountService {
 		if (caregiverRepository.existsByAccount_Id(account.getId())) {
 			return caregiverRepository.findByAccount_Id(account.getId()).get();
 		}
-		throw new ApiException(ErrorCode.NOT_EXIST_ACCOUNT);
+		return null;
 	}
 
 }
