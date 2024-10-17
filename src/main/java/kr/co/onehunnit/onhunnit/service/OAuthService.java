@@ -16,7 +16,6 @@ import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
-import kr.co.onehunnit.onhunnit.domain.account.Status;
 import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.dto.token.RefreshTokenDto;
 import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
@@ -38,7 +37,6 @@ public class OAuthService {
 
 		if (accountRepository.notExistsAccountByEmailAndProvider(email, provider)) {
 			saveAccount(kakaoUserInfo, email);
-			return null;
 		}
 		return jwtTokenProvider.generateToken(getAuthentication(email, String.valueOf(provider)));
 	}
@@ -51,7 +49,6 @@ public class OAuthService {
 			.email(email)
 			.name(nickname)
 			.profile_image(picture)
-			.status(Status.SIGNUP_PENDING)
 			.build();
 		accountRepository.save(newAccount);
 	}

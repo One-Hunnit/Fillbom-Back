@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Gender;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
-import kr.co.onehunnit.onhunnit.domain.account.Status;
 import kr.co.onehunnit.onhunnit.domain.global.Role;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,24 +38,20 @@ public class TokenAccountInfoDto {
 	@Schema(description = "생년월일")
 	private String birthday;
 
-	@Schema(description = "상태(SIGNUP_PENDING,REGISTER_INFO_PENDING,DONE)")
-	private Status status;
-
 	@Schema(description = "역할(PATIENT,CAREGIVER")
 	private String role;
 
 	@Builder
-	public TokenAccountInfoDto(Account account, Role role) {
+	public TokenAccountInfoDto(Account account, Role role, Integer age) {
 		this.id = account.getId();
 		this.email = account.getEmail();
 		this.provider = account.getProvider();
 		this.profile_image = account.getProfile_image();
 		this.name = account.getName();
-		this.age = account.getAge();
+		this.age = age;
 		this.phone = account.getPhone();
 		this.gender = account.getGender();
-		this.birthday = account.getBirthday();
-		this.status = account.getStatus();
+		this.birthday = (account.getBirthday() == null) ? null : account.getBirthday();
 		this.role = (role == null) ? null : role.getRoleName();
 	}
 

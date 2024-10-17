@@ -2,7 +2,6 @@ package kr.co.onehunnit.onhunnit.dto.account;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.onehunnit.onhunnit.domain.account.Gender;
-import kr.co.onehunnit.onhunnit.domain.account.Status;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,17 +10,9 @@ public class AccountRequestDto {
 	@Getter
 	@Builder
 	public static class SignUp {
-		@Schema(description = "이메일")
-		private String email;
-
-		@Schema(description = "소셜 미디어(KAKAO,APPLE)")
-		private String provider;
 
 		@Schema(description = "이름")
 		private String name;
-
-		@Schema(description = "나이")
-		private Integer age;
 
 		@Schema(description = "성별(MAN,WOMAN)")
 		private String gender;
@@ -35,6 +26,9 @@ public class AccountRequestDto {
 		@Schema(description = "프로필이미지 url")
 		private String profile_image;
 
+		@Schema(description = "역할(PATIENT,CAREGIVER)")
+		private String role;
+
 	}
 
 	@Getter
@@ -45,7 +39,6 @@ public class AccountRequestDto {
 		private String phone;
 		private String birthday;
 		private Gender gender;
-		private Status status;
 	}
 
 }
