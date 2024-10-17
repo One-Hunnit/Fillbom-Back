@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.jsonwebtoken.JwtException;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
@@ -76,7 +77,7 @@ public class AccountService {
 		String email = tokenInfoDto.getEmail();
 		Provider provider = Provider.valueOf(tokenInfoDto.getProvider());
 		return accountRepository.findByEmailAndProvider(email, provider)
-			.orElseThrow(() -> new ApiException(ErrorCode.NO_TOKEN_ACCOUNT));
+			.orElseThrow(() -> new JwtException("토큰에 해당하는 계정 정보가 없습니다."));
 	}
 
 	public TokenAccountInfoDto getAccessTokenInfo(String accessToken) {

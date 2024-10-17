@@ -3,6 +3,7 @@ package kr.co.onehunnit.onhunnit.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,7 @@ public class DiaryServiceForCaregiver {
 			() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
 
 		if (isNotCaregiverOfPatient(caregiver, patient)) {
-			throw new ApiException(ErrorCode.UNAUTHORIZED_ACCESS);
+			throw new AccessDeniedException("권한이 없는 환자의 정보를 조회할 수 없습니다.");
 		}
 
 		return diaryRepository.findAllByPatientAndSharedTrueOrderByCreatedAtDesc(patient).stream()
@@ -50,7 +51,7 @@ public class DiaryServiceForCaregiver {
 			() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
 
 		if (isNotCaregiverOfPatient(caregiver, patient)) {
-			throw new ApiException(ErrorCode.UNAUTHORIZED_ACCESS);
+			throw new AccessDeniedException("권한이 없는 환자의 정보를 조회할 수 없습니다.");
 		}
 
 		Diary diary = diaryRepository.findById(diaryId).filter(d -> d.getPatient().equals(patient))

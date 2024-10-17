@@ -2,11 +2,13 @@ package kr.co.onehunnit.onhunnit.config.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 
 @RestControllerAdvice(basePackages = "kr.co.onehunnit.onhunnit.controller")
 public class ApiExceptionController {
@@ -19,6 +21,18 @@ public class ApiExceptionController {
 			.message(exception.getErrorCode().getMessage())
 			.build();
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(JwtException.class)
+	public ResponseEntity<ErrorResponse> handleJwtException(JwtException exception) {
+		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), 401, 401);
+		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception) {
+		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), 500, 403);
+		return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
