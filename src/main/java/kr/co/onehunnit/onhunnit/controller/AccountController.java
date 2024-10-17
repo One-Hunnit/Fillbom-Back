@@ -34,11 +34,11 @@ public class AccountController {
 
 	@Operation(summary = "회원가입")
 	@PostMapping("/sign-up")
-	public ResponseDto<String> signUp(@RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
+	public ResponseDto<String> signUp(HttpServletRequest request, @RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ApiException(ErrorCode.ACCOUNT_DATA_ERROR);
 		}
-		return ResponseUtil.SUCCESS("회원가입에 성공하였습니다.", accountService.signUp(requestDto));
+		return ResponseUtil.SUCCESS("회원가입에 성공하였습니다.", accountService.signUp(request.getHeader("Authorization"), requestDto));
 	}
 
 	@Operation(summary = "계정 정보 조회", description = "jwt 토큰 필요")

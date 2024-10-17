@@ -36,17 +36,12 @@ public class Account extends BaseTimeEntity {
 
 	private String name;
 
-	private Integer age;
-
 	private String phone;
 
 	@Enumerated(value = EnumType.STRING)
 	private Gender gender;
 
 	private String birthday;
-
-	@Enumerated(value = EnumType.STRING)
-	private Status status;
 
 	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Patient patient;
@@ -56,7 +51,6 @@ public class Account extends BaseTimeEntity {
 
 	public void signUp(AccountRequestDto.SignUp requestDto) {
 		this.name = requestDto.getName();
-		this.age = requestDto.getAge();
 		this.phone = requestDto.getPhone();
 		this.gender = Gender.valueOf(requestDto.getGender());
 		this.birthday = requestDto.getBirthday();
@@ -69,10 +63,6 @@ public class Account extends BaseTimeEntity {
 		this.profile_image = updateDto.getProfile_image();
 		this.phone = updateDto.getPhone();
 		this.gender = updateDto.getGender();
-		this.status = updateDto.getStatus();
 	}
 
-	public void updateStatus(Status status) {
-		this.status = status;
-	}
 }
