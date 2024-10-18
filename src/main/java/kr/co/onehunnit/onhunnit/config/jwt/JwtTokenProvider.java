@@ -1,5 +1,6 @@
 package kr.co.onehunnit.onhunnit.config.jwt;
 
+import java.nio.file.AccessDeniedException;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -73,11 +75,11 @@ public class JwtTokenProvider {
 		return (new Date()).getTime();
 	}
 
-	public Authentication getAuthentication(String accessToken) {
+	public Authentication getAuthentication(String accessToken) throws AccessDeniedException {
 		Claims claims = parseClaims(accessToken);
 
 		if (claims.get("auth") == null) {
-			throw new ApiException(ErrorCode.ACCESS_DENIED);
+			throw new AccessDeniedException("권한이 없습니다.");
 		}
 
 		Collection<? extends GrantedAuthority> authorities =
@@ -97,13 +99,13 @@ public class JwtTokenProvider {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
 			return true;
 		} catch (SecurityException | MalformedJwtException e) {
-			throw new ApiException(ErrorCode.INVALID_TOKEN);
+			throw new MalformedJwtException("유효하지 않은 토큰입니다.");
 		} catch (ExpiredJwtException e) {
-			throw new ApiException(ErrorCode.EXPIRED_TOKEN);
+			throw new JwtException("만료된 토큰입니다.");
 		} catch (UnsupportedJwtException e) {
-			throw new ApiException(ErrorCode.UNSUPPORTED_TOKEN);
+			throw new UnsupportedJwtException("변조된 토큰입니다.");
 		} catch (IllegalArgumentException e) {
-			throw new ApiException(ErrorCode.UNKNOWN_ERROR);
+			throw new IllegalArgumentException("토큰이 존재하지 않습니다.");
 		}
 	}
 
@@ -130,7 +132,7 @@ public class JwtTokenProvider {
 				.parseClaimsJws(accessToken)
 				.getBody();
 		} catch (ExpiredJwtException e) {
-			throw new ApiException(ErrorCode.EXPIRED_TOKEN);
+			throw new JwtException("만료된 토큰입니다.");
 		}
 	}
 

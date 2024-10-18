@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.JwtException;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
@@ -53,10 +54,10 @@ public class OAuthService {
 		accountRepository.save(newAccount);
 	}
 
-	public TokenInfoDto reGenerateAccessToken(RefreshTokenDto refreshTokenDto) {
+	public TokenInfoDto reGenerateAccessToken(RefreshTokenDto refreshTokenDto) throws JwtException {
 		String refreshToken = refreshTokenDto.getRefreshToken();
 		if (!jwtTokenProvider.validateToken(refreshToken.substring(7).trim())) {
-			throw new ApiException(ErrorCode.INVALID_TOKEN);
+			throw new JwtException("유효하지 않은 토큰입니다.");
 		}
 
 		TokenAccountInfoDto.TokenInfo tokenInfoDto = jwtTokenProvider.extractTokenInfoFromJwt(refreshToken);
