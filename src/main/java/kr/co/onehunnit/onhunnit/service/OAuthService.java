@@ -12,8 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.JwtException;
-import kr.co.onehunnit.onhunnit.config.exception.ApiException;
-import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;

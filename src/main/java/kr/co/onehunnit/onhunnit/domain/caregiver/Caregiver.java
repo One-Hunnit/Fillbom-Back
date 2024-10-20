@@ -1,4 +1,4 @@
-package kr.co.onehunnit.onhunnit.domain.account;
+package kr.co.onehunnit.onhunnit.domain.caregiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.global.BaseTimeEntity;
 import kr.co.onehunnit.onhunnit.domain.global.Role;
 import kr.co.onehunnit.onhunnit.domain.patient_Caregiver.PatientCaregiver;

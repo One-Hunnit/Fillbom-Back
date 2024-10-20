@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import kr.co.onehunnit.onhunnit.config.response.ResponseDto;
 import kr.co.onehunnit.onhunnit.config.response.ResponseUtil;
 import kr.co.onehunnit.onhunnit.dto.district.DistrictResponseDto;
+import kr.co.onehunnit.onhunnit.service.DistrictService;
 import kr.co.onehunnit.onhunnit.service.SafeZoneService;
 import lombok.RequiredArgsConstructor;
 
@@ -26,13 +27,14 @@ import lombok.RequiredArgsConstructor;
 public class SafeZoneController {
 
 	private final SafeZoneService safeZoneService;
+	private final DistrictService districtService;
 
 	@Operation(summary = "안전구역 설정")
 	@PostMapping("/patients/{patientId}")
 	public ResponseDto<Long> registerSafeZone(HttpServletRequest request, @PathVariable Long patientId,
 		@RequestParam(name = "adm_cd") String adm_cd) {
 		return ResponseUtil.SUCCESS("안전구역 설정에 성공하였습니다.",
-			safeZoneService.registerSafeZone(request.getHeader("Authorization"), patientId, adm_cd));
+			safeZoneService.registerSafeZone(patientId, adm_cd));
 	}
 
 	@Operation(summary = "안전구역 목록 조회")
@@ -46,6 +48,14 @@ public class SafeZoneController {
 	public ResponseDto<Long> deleteSafeZone(@PathVariable Long safeZoneId) {
 		safeZoneService.deleteSafeZone(safeZoneId);
 		return ResponseUtil.SUCCESS("안전구역 삭제에 성공하였습니다.", safeZoneId);
+	}
+
+	@Operation(summary = "안전구역 내 존재 확인")
+	@GetMapping("/patients/{patientId}/checking")
+	public String checkSafeZone(@PathVariable Long patientId, @RequestParam(name = "longitude") double longitude,
+		@RequestParam(name = "latitude") double latitude) {
+		return districtService.isPatientPointInPolygon(patientId, longitude, latitude)
+			? "현재위치가 안전 구역 내에 포함됩니다." : "현재위치가 안전 구역 내에 포함되지 않습니다.";
 	}
 
 }

@@ -8,11 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.jsonwebtoken.JwtException;
-import kr.co.onehunnit.onhunnit.config.exception.ApiException;
-import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
-import kr.co.onehunnit.onhunnit.domain.account.Caregiver;
+import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
 import kr.co.onehunnit.onhunnit.domain.global.Role;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;

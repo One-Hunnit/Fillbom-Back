@@ -1,7 +1,7 @@
 package kr.co.onehunnit.onhunnit.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +22,15 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class SafeZoneService {
 
-	private final AccountService accountService;
 	private final PatientRepository patientRepository;
 	private final DistrictRepository districtRepository;
 	private final SafeZoneRepository safeZoneRepository;
 
-	public Long registerSafeZone(String accessToken, Long patientId, String adm_cd) {
-		accountService.getAccountByToken(accessToken);
-
-		Patient patient = patientRepository.findById(patientId).orElseThrow(
-			() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
-		District district = districtRepository.findByAdmCd(adm_cd).orElseThrow(
-			() -> new ApiException(ErrorCode.NOT_EXIST_DISTRICT));
+	public Long registerSafeZone(Long patientId, String adm_cd) {
+		Patient patient = patientRepository.findById(patientId)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
+		District district = districtRepository.findByAdmCd(adm_cd)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_DISTRICT));
 
 		SafeZone safeZone = SafeZone.builder()
 			.patient(patient)
@@ -50,15 +47,12 @@ public class SafeZoneService {
 	}
 
 	private static List<DistrictResponseDto> convertToDistrictResponseDtoList(List<SafeZone> safeZoneList) {
-		List<DistrictResponseDto> districtResponseDtoList = new ArrayList<>();
-		for (SafeZone safeZone : safeZoneList) {
-			DistrictResponseDto districtResponseDto = DistrictResponseDto.builder()
+		return safeZoneList.stream()
+			.map(safeZone -> DistrictResponseDto.builder()
 				.adm_nm(safeZone.getDistrict().getAdmNm())
 				.adm_cd(safeZone.getDistrict().getAdmCd())
-				.build();
-			districtResponseDtoList.add(districtResponseDto);
-		}
-		return districtResponseDtoList;
+				.build())
+			.collect(Collectors.toList());
 	}
 
 	public void deleteSafeZone(Long safeZoneId) {

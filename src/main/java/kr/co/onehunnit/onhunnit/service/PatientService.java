@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
-import kr.co.onehunnit.onhunnit.domain.account.Caregiver;
+import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
 import kr.co.onehunnit.onhunnit.domain.patient_Caregiver.PatientCaregiver;
 import kr.co.onehunnit.onhunnit.repository.CaregiverRepository;
@@ -31,7 +31,7 @@ public class PatientService {
 		Caregiver caregiver = caregiverRepository.findById(caregiverId)
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
 
-		PatientCaregiver patientCaregiver = new PatientCaregiver().builder()
+		PatientCaregiver patientCaregiver = PatientCaregiver.builder()
 			.patient(patient)
 			.caregiver(caregiver)
 			.is_accepted(true)
