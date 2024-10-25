@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
-import kr.co.onehunnit.onhunnit.domain.account.Caregiver;
+import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.diary.Diary;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
 import kr.co.onehunnit.onhunnit.dto.diary.DiaryResponseDto;

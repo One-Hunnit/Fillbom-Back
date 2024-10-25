@@ -24,7 +24,6 @@ public class DiaryServiceForPatient {
 
 	private final DiaryRepository diaryRepository;
 	private final PatientRepository patientRepository;
-
 	private final AccountService accountService;
 
 	public Long saveDiary(String accessToken, DiaryRequestDto diaryRequestDto) {

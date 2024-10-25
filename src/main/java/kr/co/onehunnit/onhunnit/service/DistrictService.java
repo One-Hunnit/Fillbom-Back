@@ -36,11 +36,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class DistrictService {
 
-	private final AccountService accountService;
 	private final DistrictRepository districtRepository;
 	private final PatientRepository patientRepository;
 	private final SafeZoneRepository safeZoneRepository;
-
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final GeometryFactory geometryFactory = new GeometryFactory();
 
@@ -81,7 +79,6 @@ public class DistrictService {
 		wktBuilder.setLength(wktBuilder.length() - 2);
 		wktBuilder.append("))");
 
-		// System.out.println("Generated WKT: " + wktBuilder.toString());
 		return wktBuilder.toString();
 	}
 

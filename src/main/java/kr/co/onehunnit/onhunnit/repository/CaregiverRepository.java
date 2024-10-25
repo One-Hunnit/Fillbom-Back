@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import kr.co.onehunnit.onhunnit.domain.account.Caregiver;
+import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 
 @Repository
 public interface CaregiverRepository extends JpaRepository<Caregiver, Long> {
