@@ -33,8 +33,7 @@ public class AccountService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final LocationService locationService;
 
-	public String signUp(String accessToken, AccountRequestDto.SignUp requestDto) {
-		Account account = getAccountByToken(accessToken);
+	public String signUp(Account account, AccountRequestDto.SignUp requestDto) {
 		account.signUp(requestDto);
 
 		if (requestDto.getRole().equals("PATIENT")) {

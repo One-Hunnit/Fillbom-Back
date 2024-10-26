@@ -1,5 +1,6 @@
 package kr.co.onehunnit.onhunnit.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.response.ResponseDto;
 import kr.co.onehunnit.onhunnit.config.response.ResponseUtil;
+import kr.co.onehunnit.onhunnit.domain.account.AccountDetails;
 import kr.co.onehunnit.onhunnit.dto.account.AccountResponseDto;
 import kr.co.onehunnit.onhunnit.dto.account.AccountRequestDto;
 import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
@@ -34,11 +36,11 @@ public class AccountController {
 
 	@Operation(summary = "회원가입")
 	@PostMapping("/sign-up")
-	public ResponseDto<String> signUp(HttpServletRequest request, @RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
+	public ResponseDto<String> signUp(@AuthenticationPrincipal AccountDetails accountDetails, @RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ApiException(ErrorCode.ACCOUNT_DATA_ERROR);
 		}
-		return ResponseUtil.SUCCESS("회원가입에 성공하였습니다.", accountService.signUp(request.getHeader("Authorization"), requestDto));
+		return ResponseUtil.SUCCESS("회원가입에 성공하였습니다.", accountService.signUp(accountDetails.getAccount(), requestDto));
 	}
 
 	@Operation(summary = "계정 정보 조회", description = "jwt 토큰 필요")

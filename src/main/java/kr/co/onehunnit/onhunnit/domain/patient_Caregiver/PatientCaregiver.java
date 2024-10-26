@@ -30,6 +30,8 @@ public class PatientCaregiver extends BaseTimeEntity {
 
 	private boolean is_accepted;
 
+	private String relationship;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
@@ -37,5 +39,9 @@ public class PatientCaregiver extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "caregiver_id")
 	private Caregiver caregiver;
+
+	public void register() {
+		this.is_accepted = true;
+	}
 
 }

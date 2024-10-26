@@ -21,6 +21,7 @@ public enum ErrorCode {
 	NOT_EXIST_DISTRICT(400, "행정 구역 정보가 존재하지 않습니다.", 901),
 
 	NOT_EXITS_DIARY(400, "일기 정보가 존재하지 않습니다.", 1001),
+	NOT_EXISTS_PATIENT_CAREGIVER(400, "환자-보호자 정보가 존재하지 않습니다.", 1101),
 
 	INVALID_TOKEN(401, "유효하지 않은 토큰입니다.", 1001),
 	UNKNOWN_ERROR(401, "토큰이 존재하지 않습니다.", 1002),
