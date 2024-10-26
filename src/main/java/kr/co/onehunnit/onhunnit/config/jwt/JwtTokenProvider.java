@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,20 +28,28 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
+import kr.co.onehunnit.onhunnit.domain.account.Account;
+import kr.co.onehunnit.onhunnit.domain.account.AccountDetails;
+import kr.co.onehunnit.onhunnit.domain.account.Provider;
 import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
+import kr.co.onehunnit.onhunnit.repository.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class JwtTokenProvider {
 
+	private final AccountRepository accountRepository;
 	private final Key key;
 	private final int ACCESSTOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; //일주일
 	private final int REFRESHTOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 21;
 
-	public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+	@Autowired
+	public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, AccountRepository accountRepository) {
 		this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+		this.accountRepository = accountRepository;
 	}
 
 	public TokenInfoDto generateToken(Authentication authentication) {
@@ -89,9 +98,14 @@ public class JwtTokenProvider {
 
 		String[] subjectParts = claims.getSubject().split(",");
 		String email = subjectParts[0];
+		Provider provider = subjectParts.length > 1 ? Provider.valueOf(subjectParts[1]) : null;
 
-		UserDetails principal = new User(email, "", authorities);
-		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+		Account account = accountRepository.findByEmailAndProvider(email, provider)
+			.orElseThrow(() -> new ApiException(ErrorCode.NO_TOKEN_ACCOUNT));
+
+		AccountDetails accountDetails = new AccountDetails(account);
+
+		return new UsernamePasswordAuthenticationToken(accountDetails, accessToken, authorities);
 	}
 
 	public boolean validateToken(String accessToken) {
