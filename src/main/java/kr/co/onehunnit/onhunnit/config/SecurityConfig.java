@@ -1,5 +1,6 @@
 package kr.co.onehunnit.onhunnit.config;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
@@ -39,10 +40,10 @@ public class SecurityConfig {
 				@Override
 				public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 					CorsConfiguration config = new CorsConfiguration();
-					config.setAllowedOrigins(Collections.singletonList("*")); //테스트를 위해 일단 전체 허용
-					config.setAllowedMethods(Collections.singletonList("*"));
+					config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080", "https://api.fillbom.com"));
+					config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 					config.setAllowCredentials(true);
-					config.setAllowedHeaders(Collections.singletonList("*"));
+					config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 					config.setMaxAge(3600L);
 					return config;
 				}
