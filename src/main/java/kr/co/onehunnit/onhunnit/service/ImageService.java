@@ -1,7 +1,11 @@
 package kr.co.onehunnit.onhunnit.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Base64;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +17,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+import kr.co.onehunnit.onhunnit.dto.image.Base64ImageDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -23,22 +28,24 @@ public class ImageService {
 	@Value("${spring.s3.bucket}")
 	private String bucketName;
 
-	public String uploadImage(MultipartFile imageFile) {
-		String fileName = generateFileName(imageFile.getOriginalFilename());
-		uploadImageToNCP(imageFile, fileName);
+	public String uploadImage(Base64ImageDto base64ImageDto) {
+		byte[] imageBytes = Base64.getDecoder().decode(base64ImageDto.getBase64Image());
+		String fileName = generateFileName();
+		uploadImageToNCP(imageBytes, fileName);
 		return generateImageUrl(fileName);
 	}
 
-	private String generateFileName(String baseName) {
+	private String generateFileName() {
 		String uniqueId = UUID.randomUUID().toString();
-		return uniqueId + "_" + baseName + ".image";
+		String datePart = new SimpleDateFormat("yyyyMMdd").format(new Date());
+		return datePart + "_" + uniqueId + ".image";
 	}
 
-	private void uploadImageToNCP(MultipartFile imageFile, String fileName) {
-		try (InputStream inputStream = imageFile.getInputStream()) {
+	private void uploadImageToNCP(byte[] imageBytes, String fileName) {
+		try (InputStream inputStream = new ByteArrayInputStream(imageBytes)) {
 			ObjectMetadata objectMetadata = new ObjectMetadata();
-			objectMetadata.setContentLength(imageFile.getSize());
-			objectMetadata.setContentType(imageFile.getContentType());
+			objectMetadata.setContentLength(imageBytes.length);
+			objectMetadata.setContentType("image/jpeg");
 
 			s3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
