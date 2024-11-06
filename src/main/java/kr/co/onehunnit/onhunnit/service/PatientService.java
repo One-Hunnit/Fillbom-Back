@@ -1,7 +1,6 @@
 package kr.co.onehunnit.onhunnit.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -44,17 +43,17 @@ public class PatientService {
 	}
 
 	public List<PatientResponseDto.Phone> findPatientsByPhone(String phoneNumber) {
-		return patientRepository.findAllByPhoneNumber(phoneNumber).stream()
-			.map(this::convertToPhoneDto)
+		List<Patient> patientList = patientRepository.findAllByPhoneNumber(phoneNumber);
+		return patientList.stream()
+			.map(patient -> {
+				Account account = patient.getAccount();
+				return PatientResponseDto.Phone.builder()
+					.name(account.getName())
+					.phoneNumber(account.getPhone())
+					.profileImageUrl(account.getProfile_image())
+					.build();
+			})
 			.collect(Collectors.toList());
-	}
-
-	private PatientResponseDto.Phone convertToPhoneDto(Patient patient) {
-		return PatientResponseDto.Phone.builder()
-			.profileImageUrl(patient.getAccount().getProfile_image())
-			.name(patient.getAccount().getName())
-			.phoneNumber(patient.getAccount().getPhone())
-			.build();
 	}
 
 	public PatientResponseDto.Detail getPatientDetail(Account account, Long patientId) {
