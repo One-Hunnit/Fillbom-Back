@@ -38,21 +38,23 @@ public class NotificationService {
 			.onStatus(status -> status.isError(), clientResponse -> {
 				return Mono.error(new RuntimeException("푸시 알림 전송에 실패하였습니다."));
 			})
-			.bodyToMono(String.class);
+			.bodyToMono(String.class)
+			.doOnSuccess(res -> {
+				Notification notification = Notification.builder()
+					.title(notificationRequestDto.getTitle())
+					.body(notificationRequestDto.getBody())
+					.account(account)
+					.build();
+				notificationRepository.save(notification);
+			});
 
-		Notification notification = Notification.builder()
-			.title(notificationRequestDto.getTitle())
-			.body(notificationRequestDto.getBody())
-			.account(account)
-			.build();
-
-		notificationRepository.save(notification);
 		return response.block();
 	}
 
 	public List<NotificationResponseDto> getAllNotifications(String accessToken) {
 		Account account = accountService.getAccountByToken(accessToken);
-		List<Notification> notificationList = notificationRepository.findAllByAccountIdOrderByCreatedAtDesc(account.getId());
+		List<Notification> notificationList = notificationRepository.findAllByAccountIdOrderByCreatedAtDesc(
+			account.getId());
 
 		return notificationList.stream()
 			.map(this::convertToDto)
