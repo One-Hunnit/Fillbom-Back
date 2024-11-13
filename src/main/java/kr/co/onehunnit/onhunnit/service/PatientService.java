@@ -1,5 +1,6 @@
 package kr.co.onehunnit.onhunnit.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,16 +45,21 @@ public class PatientService {
 
 	public List<PatientResponseDto.Phone> findPatientsByPhone(String phoneNumber) {
 		List<Patient> patientList = patientRepository.findAllByPhoneNumber(phoneNumber);
-		return patientList.stream()
-			.map(patient -> {
-				Account account = patient.getAccount();
-				return PatientResponseDto.Phone.builder()
+		List<PatientResponseDto.Phone> patientResponseDto = new ArrayList<>();
+
+		for (Patient patient : patientList) {
+			Account account = patient.getAccount();
+			if (account != null) {
+				PatientResponseDto.Phone phoneDto = PatientResponseDto.Phone.builder()
 					.name(account.getName())
 					.phoneNumber(account.getPhone())
-					.profileImageUrl(account.getProfile_image())
+					.profileImageUrl(account.getProfile_image()) // 메서드 이름 확인
 					.build();
-			})
-			.collect(Collectors.toList());
+				patientResponseDto.add(phoneDto);
+			}
+		}
+
+		return patientResponseDto;
 	}
 
 	public PatientResponseDto.Detail getPatientDetail(Account account, Long patientId) {
