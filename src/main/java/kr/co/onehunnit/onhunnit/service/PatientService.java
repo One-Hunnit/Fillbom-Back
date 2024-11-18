@@ -1,6 +1,8 @@
 package kr.co.onehunnit.onhunnit.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -44,15 +46,15 @@ public class PatientService {
 
 	public List<PatientResponseDto.Phone> findPatientsByPhone(String phoneNumber) {
 		List<Patient> patientList = patientRepository.findAllByPhoneNumber(phoneNumber);
+
 		return patientList.stream()
-			.map(patient -> {
-				Account account = patient.getAccount();
-				return PatientResponseDto.Phone.builder()
-					.name(account.getName())
-					.phoneNumber(account.getPhone())
-					.profileImageUrl(account.getProfile_image())
-					.build();
-			})
+			.map(Patient::getAccount)
+			.filter(Objects::nonNull)
+			.map(accout -> PatientResponseDto.Phone.builder()
+				.name(accout.getName())
+				.phoneNumber(accout.getPhone())
+				.profileImageUrl(accout.getProfile_image())
+				.build())
 			.collect(Collectors.toList());
 	}
 

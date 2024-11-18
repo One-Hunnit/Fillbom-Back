@@ -17,7 +17,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
 	boolean existsByAccount_Id(Long id);
 
-	@Query("select p from Patient p join p.account a where a.phone = :phone")
+	@Query("select p from Patient p join p.account a where a.phone like concat('%', :phone, '%')")
 	List<Patient> findAllByPhoneNumber(@Param("phone") String phone);
 
 }
