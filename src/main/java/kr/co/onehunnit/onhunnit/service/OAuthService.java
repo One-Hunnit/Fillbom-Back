@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.jsonwebtoken.JwtException;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
@@ -21,6 +22,7 @@ import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
 import kr.co.onehunnit.onhunnit.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class OAuthService {

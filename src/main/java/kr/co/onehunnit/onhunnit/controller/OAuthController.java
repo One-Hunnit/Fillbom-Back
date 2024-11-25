@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import kr.co.onehunnit.onhunnit.config.response.ResponseDto;
 import kr.co.onehunnit.onhunnit.config.response.ResponseUtil;
 import kr.co.onehunnit.onhunnit.dto.token.IdTokenDto;
@@ -27,7 +28,7 @@ public class OAuthController {
 
 	@Operation(summary = "카카오 소셜로그인")
 	@PostMapping("/kakao")
-	public ResponseDto<TokenInfoDto> kakaoLogin(@RequestBody IdTokenDto idTokenDto) {
+	public ResponseDto<TokenInfoDto> kakaoLogin(@Valid @RequestBody IdTokenDto idTokenDto) {
 		return ResponseUtil.SUCCESS("카카오 로그인에 성공하였습니다.", oAuthService.kakaoOAuthLogin(idTokenDto.getIdToken()));
 	}
 
