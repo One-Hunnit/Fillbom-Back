@@ -30,7 +30,17 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2.4.2
         with:
-          arguments: clean build -x test
+          arguments: clean build
+
+#      - name: Run tests with Gradle
+#        id: test
+#        run: ./gradlew test
+
+      - name: 테스트 결과를 PR에 코멘트로 등록
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: '**/build/test-results/test/TEST-*.xml'
 
       - name: Docker build & push to Docker repo
         run: |

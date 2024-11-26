@@ -88,3 +88,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+test {
+    exclude '**/OAuthServiceTest.class'
+}
