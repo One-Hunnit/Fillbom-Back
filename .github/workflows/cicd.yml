@@ -5,6 +5,9 @@ on:
     branches: [ "develope" ]
 permissions:
   contents: read
+  issues: read
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
@@ -32,16 +35,17 @@ jobs:
         with:
           arguments: clean build
 
-#      - name: Run tests with Gradle
-#        id: test
-#        run: ./gradlew test
-
-      - name: 테스트 결과를 PR에 코멘트로 등록
+      - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
           files: '**/build/test-results/test/TEST-*.xml'
-          github_token: '${{ secrets.GIT_TOKEN }}'
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
 
       - name: Docker build & push to Docker repo
         run: |
