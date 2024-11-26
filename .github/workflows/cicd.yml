@@ -41,6 +41,7 @@ jobs:
         if: always()
         with:
           files: '**/build/test-results/test/TEST-*.xml'
+          github_token: '${{ secrets.GIT_TOKEN }}'
 
       - name: Docker build & push to Docker repo
         run: |
