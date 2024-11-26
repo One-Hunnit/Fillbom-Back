@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
+import kr.co.onehunnit.onhunnit.util.account.AccountUtil;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -33,7 +34,7 @@ class AccountRepositoryTest {
 		// given
 		String email = "test@daum.net";
 		Provider provider = KAKAO;
-		Account account = createAccount(email, provider);
+		Account account = AccountUtil.createAccount(email, provider);
 		accountRepository.save(account);
 
 		// when
@@ -57,13 +58,6 @@ class AccountRepositoryTest {
 
 		//then
 		assertThat(isSignedUp).isTrue();
-	}
-
-	private Account createAccount(String email, Provider provider) {
-		return Account.builder()
-			.email(email)
-			.provider(provider)
-			.build();
 	}
 
 }

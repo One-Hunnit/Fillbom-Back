@@ -17,6 +17,7 @@ import kr.co.onehunnit.onhunnit.domain.account.Provider;
 import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
 import kr.co.onehunnit.onhunnit.repository.AccountRepository;
+import kr.co.onehunnit.onhunnit.util.account.AccountUtil;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -68,7 +69,7 @@ class OAuthServiceTest {
 		String email = kakaoUserInfo.get("email").toString();
 		String nickname = kakaoUserInfo.get("nickname").toString();
 		String picture = kakaoUserInfo.get("picture").toString();
-		Account account = createAccount(email, nickname, picture);
+		Account account = AccountUtil.createAccount(email, nickname, picture);
 		accountRepository.save(account);
 
 		//when
@@ -79,15 +80,6 @@ class OAuthServiceTest {
 		assertThat(tokenInfoDto.getGrantType()).isEqualTo("Bearer");
 		assertThat(tokenInfoDto.getAccessToken()).isNotNull();
 		assertThat(tokenInfoDto.getRefreshToken()).isNotNull();
-	}
-
-	private Account createAccount(String email, String nickname, String picture) {
-		return Account.builder()
-			.provider(Provider.KAKAO)
-			.email(email)
-			.name(nickname)
-			.profile_image(picture)
-			.build();
 	}
 
 }
