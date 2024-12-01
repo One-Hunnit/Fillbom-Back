@@ -30,8 +30,8 @@ public class District {
 	private String admNm;
 	private String admCd;
 
-	// @Column(columnDefinition = "geometry(MULTIPOLYGON,4326)")
-	@Column(columnDefinition = "GEOMETRY")
+	// @Column(columnDefinition = "GEOMETRY")
+	@Column(columnDefinition = "geometry(MULTIPOLYGON,4326)")
 	private MultiPolygon geom;
 
 	@Builder.Default

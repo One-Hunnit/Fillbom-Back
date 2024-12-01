@@ -47,8 +47,8 @@ dependencies {
     //swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
-    //mysql
-    implementation 'com.mysql:mysql-connector-j'
+    //postgreSQL
+    implementation 'org.postgresql:postgresql'
 
     // h2
     runtimeOnly 'com.h2database:h2'
