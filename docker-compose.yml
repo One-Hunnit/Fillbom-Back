@@ -10,9 +10,11 @@ services:
       - app-network
 
   spring-app:
-    build:
-      context: .
+#    build:
+#      context: /home/ncp
+#      dockerfile: Dockerfile
     container_name: thirsty_robinson
+    image: koc2827857/fillbom
     ports:
       - "8080:8080"
     environment:
