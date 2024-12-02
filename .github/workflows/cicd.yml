@@ -70,12 +70,21 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
             echo "docker 로그인 성공"
-            sudo docker stop $(sudo docker ps -aq)
-            echo "현재 실행 중인 모든 Docker 컨테이너 중지"
-            sudo docker rm -f $(sudo docker ps -qa)
-            echo "모든 Docker 컨테이너 강제로 삭제"
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/fillbom
             echo "docker pull 성공"
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/fillbom
+            sudo docker-compose down
+            echo "기존 Docker Compose 컨테이너 중지 및 제거"
+            sudo docker-compose up -d
+            echo "Docker Compose로 컨테이너 시작 완료"
             sudo docker image prune -f
             echo "사용하지 않는 Docker image 정리"
+                    
+
+#            sudo docker stop $(sudo docker ps -aq)
+#            echo "현재 실행 중인 모든 Docker 컨테이너 중지"
+#            sudo docker rm -f $(sudo docker ps -qa)
+#            echo "모든 Docker 컨테이너 강제로 삭제"
+
+#            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/fillbom
+#            sudo docker image prune -f
+#            echo "사용하지 않는 Docker image 정리"
