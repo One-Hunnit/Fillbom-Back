@@ -74,7 +74,8 @@ jobs:
             echo "docker 로그인 성공"
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/fillbom
             echo "docker pull 성공"
-            sudo docker-compose -f $COMPOSE down --rmi all
+#            sudo docker-compose -f $COMPOSE down
+            sudo docker rm -f $(sudo docker ps -qa)
             echo "기존 Docker Compose 컨테이너 중지 및 제거"
             sudo docker-compose -f $COMPOSE up -d
             echo "Docker Compose로 컨테이너 시작 완료"
