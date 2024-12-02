@@ -34,7 +34,7 @@ public class AccountService {
 	private final LocationService locationService;
 
 	public String signUp(Account account, AccountRequestDto.SignUp requestDto) {
-		account.signUp(requestDto);
+		accountRepository.save(account.signUp(requestDto));
 
 		if (requestDto.getRole().equals("PATIENT")) {
 			Patient patient = Patient.builder().account(account).build();
