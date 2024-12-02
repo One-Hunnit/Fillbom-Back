@@ -62,19 +62,17 @@ jobs:
     steps:
       - name: NCP login and docker image pull and run
         uses: appleboy/ssh-action@master
-        env:
-          COMPOSE: "/home/ncp/docker-compose.yml"
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USERNAME }}
           password: ${{ secrets.NCP_PASSWORD }}
           port: ${{ secrets.NCP_PORT }}
           script: |
+            COMPOSE:"/home/ncp/docker-compose.yml"
             sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
             echo "docker 로그인 성공"
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/fillbom
             echo "docker pull 성공"
-#            sudo docker-compose -f $COMPOSE down
             sudo docker rm -f $(sudo docker ps -qa)
             echo "기존 Docker Compose 컨테이너 중지 및 제거"
             sudo docker-compose -f $COMPOSE up -d
