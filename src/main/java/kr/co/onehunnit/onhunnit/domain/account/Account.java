@@ -33,7 +33,7 @@ public class Account extends BaseTimeEntity {
 	@Enumerated(value = EnumType.STRING)
 	private Provider provider;
 
-	private String profile_image;
+	private String profileImageUrl;
 
 	private String name;
 
@@ -55,7 +55,7 @@ public class Account extends BaseTimeEntity {
 		this.phone = requestDto.getPhone();
 		this.gender = Gender.valueOf(requestDto.getGender());
 		this.birthday = requestDto.getBirthday();
-		this.profile_image = requestDto.getProfile_image();
+		this.profileImageUrl = requestDto.getProfileImageUrl();
 
 		return this;
 	}
@@ -63,7 +63,7 @@ public class Account extends BaseTimeEntity {
 	public void update(AccountRequestDto.Update updateDto) {
 		this.name = updateDto.getName();
 		this.birthday = updateDto.getBirthday();
-		this.profile_image = updateDto.getProfile_image();
+		this.profileImageUrl = updateDto.getProfile_image();
 		this.phone = updateDto.getPhone();
 		this.gender = updateDto.getGender();
 	}

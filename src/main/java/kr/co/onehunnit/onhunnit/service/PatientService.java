@@ -1,6 +1,5 @@
 package kr.co.onehunnit.onhunnit.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -53,7 +52,7 @@ public class PatientService {
 			.map(accout -> PatientResponseDto.Phone.builder()
 				.name(accout.getName())
 				.phoneNumber(accout.getPhone())
-				.profileImageUrl(accout.getProfile_image())
+				.profileImageUrl(accout.getProfileImageUrl())
 				.build())
 			.collect(Collectors.toList());
 	}
@@ -71,7 +70,7 @@ public class PatientService {
 		PatientResponseDto.Location location = redisUtils.getLocationByPatientId(patientId);
 
 		return PatientResponseDto.Detail.builder()
-			.profileImageUrl(patient.getAccount().getProfile_image())
+			.profileImageUrl(patient.getAccount().getProfileImageUrl())
 			.name(patient.getRoleName())
 			.gender(patient.getAccount().getGender())
 			.birthday(patient.getAccount().getBirthday())

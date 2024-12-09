@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
-import kr.co.onehunnit.onhunnit.domain.account.AccountDetails;
 import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
 import kr.co.onehunnit.onhunnit.domain.patient_Caregiver.PatientCaregiver;
@@ -59,7 +58,7 @@ public class CaregiverService {
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
 
 		return PatientResponseDto.BriefDetail.builder()
-			.profileImageUrl(patient.getAccount().getProfile_image())
+			.profileImageUrl(patient.getAccount().getProfileImageUrl())
 			.name(patient.getAccount().getName())
 			.relationship(patientCaregiver.getRelationship())
 			.isAccepted(patientCaregiver.is_accepted())

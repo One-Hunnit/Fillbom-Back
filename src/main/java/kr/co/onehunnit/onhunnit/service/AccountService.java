@@ -44,7 +44,7 @@ public class AccountService {
 			Caregiver caregiver = Caregiver.builder().account(account).build();
 			caregiverRepository.save(caregiver);
 		}
-		return requestDto.getProfile_image();
+		return requestDto.getProfileImageUrl();
 	}
 
 	public AccountResponseDto.Info updateUserInfo(String accessToken, AccountRequestDto.Update updateDto) {
@@ -54,7 +54,7 @@ public class AccountService {
 			.id(account.getId())
 			.email(account.getEmail())
 			.phone(account.getPhone())
-			.profile_image(account.getProfile_image())
+			.profile_image(account.getProfileImageUrl())
 			.name(account.getName())
 			.birthday(account.getBirthday())
 			.gender(account.getGender())
