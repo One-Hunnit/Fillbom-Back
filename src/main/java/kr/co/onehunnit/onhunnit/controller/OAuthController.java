@@ -17,7 +17,7 @@ import kr.co.onehunnit.onhunnit.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "회원가입, 로그인, 토큰")
+@Tag(name = "소셜 로그인, 토큰")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +30,12 @@ public class OAuthController {
 	@PostMapping("/kakao")
 	public ResponseDto<TokenInfoDto> kakaoLogin(@Valid @RequestBody IdTokenDto idTokenDto) {
 		return ResponseUtil.SUCCESS("카카오 로그인에 성공하였습니다.", oAuthService.kakaoOAuthLogin(idTokenDto.getIdToken()));
+	}
+
+	@Operation(summary = "애플 소셜로그인")
+	@PostMapping("/apple")
+	public ResponseDto<TokenInfoDto> appleLogin(@Valid @RequestBody IdTokenDto idTokenDto) {
+		return ResponseUtil.SUCCESS("애플 로그인에 성공하였습니다.", oAuthService.appleOAuthLogin(idTokenDto.getIdToken()));
 	}
 
 	@Operation(summary = "토큰 재발급", description = "리프레시 토큰 앞에 토큰 타입 'Bearer ' 필요")

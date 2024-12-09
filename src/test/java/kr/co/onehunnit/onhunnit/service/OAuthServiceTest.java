@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
-import kr.co.onehunnit.onhunnit.domain.account.Provider;
-import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
 import kr.co.onehunnit.onhunnit.repository.AccountRepository;
 import kr.co.onehunnit.onhunnit.util.account.AccountUtil;
@@ -55,7 +52,7 @@ class OAuthServiceTest {
 		assertThat(accountRepository.count()).isEqualTo(1);
 		assertThat(accountRepository.findById(1L).get().getName()).isEqualTo(nickname);
 		assertThat(accountRepository.findById(1L).get().getEmail()).isEqualTo(email);
-		assertThat(accountRepository.findById(1L).get().getProfile_image()).isEqualTo(picture);
+		assertThat(accountRepository.findById(1L).get().getProfileImageUrl()).isEqualTo(picture);
 		assertThat(tokenInfoDto.getGrantType()).isEqualTo("Bearer");
 		assertThat(tokenInfoDto.getAccessToken()).isNotNull();
 		assertThat(tokenInfoDto.getRefreshToken()).isNotNull();

@@ -24,7 +24,7 @@ public class AccountRequestDto {
 		private String birthday;
 
 		@Schema(description = "프로필이미지 url")
-		private String profile_image;
+		private String profileImageUrl;
 
 		@Schema(description = "역할(PATIENT,CAREGIVER)")
 		private String role;

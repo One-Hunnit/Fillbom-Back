@@ -38,8 +38,12 @@ public enum ErrorCode {
 	FAILED_TO_RETRIEVE_KAKAO_ACCESS_TOKEN(401, "카카오로부터 AccessToken 발급에 실패했습니다.", 1009),
 	RESPONSE_CODE_ERROR(401, "인가 코드 요청에 따른 응답 코드가 200이 아닙니다.", 1010),
 	FAILED_TO_RETRIEVE_KAKAO_USER_INFO(401, "카카오로부터 유저 정보 발급에 실패했습니다.", 1011),
-	NO_TOKEN_ACCOUNT(401, "토큰에 해당하는 계정 정보가 없습니다.", 1012),
-	UNAUTHORIZED_ACCESS(401, "권한이 없는 환자의 정보를 조회할 수 없습니다.", 1013),
+	FAILED_TO_RETRIEVE_APPLE_USER_INFO(401, "애플로부터 유저 정보 발급에 실패했습니다.", 1012),
+	NO_TOKEN_ACCOUNT(401, "토큰에 해당하는 계정 정보가 없습니다.", 1013),
+	UNAUTHORIZED_ACCESS(401, "권한이 없는 환자의 정보를 조회할 수 없습니다.", 1014),
+	NOT_VALIDATE_EMAIL(401, "인증받지 못한 이메일입니다.", 1015),
+	FAIL_TO_DECODE(401, "헤더 디코딩에 실패했습니다.", 1016),
+	FAIL_TO_GET_PUBLIC_KEY(401, "공개 키를 가져오는 데 실패했습니다.", 1017),
 	;
 
 

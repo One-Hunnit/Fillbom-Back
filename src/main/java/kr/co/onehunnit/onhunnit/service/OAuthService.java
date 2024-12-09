@@ -3,6 +3,7 @@ package kr.co.onehunnit.onhunnit.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,7 +13,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.auth0.jwt.interfaces.Claim;
+
 import io.jsonwebtoken.JwtException;
+import kr.co.onehunnit.onhunnit.config.exception.ApiException;
+import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
@@ -28,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuthService {
 
 	private final KakaoSocialService kakaoSocialService;
+	private final AppleSocialService appleSocialService;
 	private final AccountRepository accountRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 
@@ -36,22 +42,46 @@ public class OAuthService {
 		String email = kakaoUserInfo.get("email").toString();
 		Provider provider = Provider.KAKAO;
 
-		if (accountRepository.notExistsAccountByEmailAndProvider(email, provider)) {
-			saveAccount(kakaoUserInfo, email);
+		if (isNewAccount(email, provider)) {
+			saveAccount(email, provider);
 		}
 		return jwtTokenProvider.generateToken(getAuthentication(email, String.valueOf(provider)));
 	}
 
-	private void saveAccount(HashMap<String, Object> kakaoUserInfo, String email) {
-		String nickname = kakaoUserInfo.get("nickname").toString();
-		String picture = kakaoUserInfo.get("picture").toString();
-		Account newAccount = Account.builder()
-			.provider(Provider.KAKAO)
-			.email(email)
-			.name(nickname)
-			.profile_image(picture)
-			.build();
+	public TokenInfoDto appleOAuthLogin(String idToken) {
+		Map<String, Claim> appleUserInfo = appleSocialService.decodeAppleIdToken(idToken).getClaims();
+		String email = appleUserInfo.get("email").asString();
+		Provider provider = Provider.APPLE;
+
+		validateEmail(appleUserInfo);
+
+		if (isNewAccount(email, provider)) {
+			saveAccount(email, provider);
+		}
+		return jwtTokenProvider.generateToken(getAuthentication(email, String.valueOf(provider)));
+	}
+
+	private void validateEmail(Map<String, Claim> appleUserInfo) {
+		Boolean emailVerified = appleUserInfo.get("email_verified").asBoolean();
+		if (emailVerified == null || !emailVerified) {
+			throw new ApiException(ErrorCode.NOT_VALIDATE_EMAIL);
+		}
+	}
+
+	private boolean isNewAccount(String email, Provider provider) {
+		return accountRepository.notExistsAccountByEmailAndProvider(email, provider);
+	}
+
+	private void saveAccount(String email, Provider provider) {
+		Account newAccount = createAccount(email, provider);
 		accountRepository.save(newAccount);
+	}
+
+	private Account createAccount(String email, Provider provider) {
+		return Account.builder()
+			.provider(provider)
+			.email(email)
+			.build();
 	}
 
 	public TokenInfoDto reGenerateAccessToken(RefreshTokenDto refreshTokenDto) throws JwtException {

@@ -46,7 +46,7 @@ public class TokenAccountInfoDto {
 		this.id = account.getId();
 		this.email = account.getEmail();
 		this.provider = account.getProvider();
-		this.profile_image = account.getProfile_image();
+		this.profile_image = account.getProfileImageUrl();
 		this.name = account.getName();
 		this.age = age;
 		this.phone = account.getPhone();
