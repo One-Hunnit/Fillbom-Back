@@ -50,15 +50,7 @@ public class AccountService {
 	public AccountResponseDto.Info updateUserInfo(String accessToken, AccountRequestDto.Update updateDto) {
 		Account account = getAccountByToken(accessToken);
 		account.update(updateDto);
-		return AccountResponseDto.Info.builder()
-			.id(account.getId())
-			.email(account.getEmail())
-			.phone(account.getPhone())
-			.profile_image(account.getProfileImageUrl())
-			.name(account.getName())
-			.birthday(account.getBirthday())
-			.gender(account.getGender())
-			.build();
+		return AccountResponseDto.Info.of(account);
 	}
 
 	public void deleteAccount(String accessToken) {

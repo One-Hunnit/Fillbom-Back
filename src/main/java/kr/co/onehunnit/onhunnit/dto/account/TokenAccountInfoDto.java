@@ -60,6 +60,13 @@ public class TokenAccountInfoDto {
 	public static class TokenInfo {
 		private String email;
 		private String provider;
+
+		public static TokenInfo of(String email, String provider) {
+			return TokenInfo.builder()
+				.email(email)
+				.provider(provider)
+				.build();
+		}
 	}
 
 

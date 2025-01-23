@@ -128,7 +128,7 @@ public class JwtTokenProvider {
 			if (subjectParts.length > 1) {
 				String email = subjectParts[0];
 				String provider = subjectParts[1];
-				return TokenAccountInfoDto.TokenInfo.builder().email(email).provider(provider).build();
+				return TokenAccountInfoDto.TokenInfo.of(email, provider);
 			}
 		}
 

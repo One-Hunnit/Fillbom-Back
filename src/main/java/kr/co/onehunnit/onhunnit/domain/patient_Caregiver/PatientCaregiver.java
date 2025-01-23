@@ -28,7 +28,7 @@ public class PatientCaregiver extends BaseTimeEntity {
 	@Column(name = "patient_caregiver_id")
 	private Long id;
 
-	private boolean is_accepted;
+	private boolean isAccepted;
 
 	private String relationship;
 
@@ -41,7 +41,7 @@ public class PatientCaregiver extends BaseTimeEntity {
 	private Caregiver caregiver;
 
 	public void register() {
-		this.is_accepted = true;
+		this.isAccepted = true;
 	}
 
 }

@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CaregiverService {
 
-	private final AccountService accountService;
 	private final CaregiverRepository caregiverRepository;
 	private final PatientRepository patientRepository;
 	private final PatientCaregiverRepository patientCaregiverRepository;
@@ -38,7 +37,7 @@ public class CaregiverService {
 			.patient(patient)
 			.caregiver(caregiver)
 			.relationship(relationship)
-			.is_accepted(false)
+			.isAccepted(false)
 			.build();
 
 		return patientCaregiverRepository.save(patientCaregiver).getId();
@@ -48,7 +47,7 @@ public class CaregiverService {
 		Caregiver caregiver = caregiverRepository.findByAccount_Id(account.getId())
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
 
-		return patientCaregiverRepository.findAllByCaregiver(caregiver).stream()
+		return patientCaregiverRepository.findAllByCaregiverAndIsAcceptedTrue(caregiver).stream()
 			.map(this::convertToBrief)
 			.collect(Collectors.toList());
 	}
@@ -57,11 +56,6 @@ public class CaregiverService {
 		Patient patient = patientRepository.findById(patientCaregiver.getPatient().getId())
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
 
-		return PatientResponseDto.BriefDetail.builder()
-			.profileImageUrl(patient.getAccount().getProfileImageUrl())
-			.name(patient.getAccount().getName())
-			.relationship(patientCaregiver.getRelationship())
-			.isAccepted(patientCaregiver.is_accepted())
-			.build();
+		return PatientResponseDto.BriefDetail.of(patient.getAccount(), patientCaregiver);
 	}
 }
