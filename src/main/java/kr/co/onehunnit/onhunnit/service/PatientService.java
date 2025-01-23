@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(isolation = Isolation.DEFAULT)
 public class PatientService {
 
 	private final PatientRepository patientRepository;
@@ -49,11 +50,7 @@ public class PatientService {
 		return patientList.stream()
 			.map(Patient::getAccount)
 			.filter(Objects::nonNull)
-			.map(accout -> PatientResponseDto.Phone.builder()
-				.name(accout.getName())
-				.phoneNumber(accout.getPhone())
-				.profileImageUrl(accout.getProfileImageUrl())
-				.build())
+			.map(PatientResponseDto.Phone::of)
 			.collect(Collectors.toList());
 	}
 
@@ -68,15 +65,7 @@ public class PatientService {
 		}
 
 		PatientResponseDto.Location location = redisUtils.getLocationByPatientId(patientId);
-
-		return PatientResponseDto.Detail.builder()
-			.profileImageUrl(patient.getAccount().getProfileImageUrl())
-			.name(patient.getRoleName())
-			.gender(patient.getAccount().getGender())
-			.birthday(patient.getAccount().getBirthday())
-			.phoneNumber(patient.getAccount().getPhone())
-			.location(location)
-			.build();
+		return PatientResponseDto.Detail.of(account, location);
 	}
 
 	private boolean isNotCaregiverOfPatient(Caregiver caregiver, Patient patient) {
