@@ -61,7 +61,6 @@ class PatientServiceTest {
 		Account patientAccount = AccountUtil.createAccount("patient@daum.net", KAKAO);
 		Account caregiverAccount = AccountUtil.createAccount("caregiver@daum.net", KAKAO);
 		accountRepository.saveAll(List.of(patientAccount, caregiverAccount));
-
 	}
 
 	@DisplayName("환자는 보호자의 요청을 수락해 등록을 할 수 있다.")
