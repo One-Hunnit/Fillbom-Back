@@ -23,6 +23,7 @@ public enum ErrorCode {
 	NOT_EXITS_DIARY(400, "일기 정보가 존재하지 않습니다.", 2001),
 
 	NOT_EXISTS_PATIENT_CAREGIVER(400, "환자-보호자 정보가 존재하지 않습니다.", 2101),
+	ALREADY_EXISTS_PATIENT_CAREGIVER(400, "이미 등록된 환자입니다.", 2102),
 
 	NOT_EXISTS_NOTIFICATION(400, "알림 정보가 존재하지 않습니다.", 2201),
 	NOT_EXISTS_ACCOUNT_NOTIFICATION(400, "유저-알림 정보가 존재하지 않습니다.", 2201),

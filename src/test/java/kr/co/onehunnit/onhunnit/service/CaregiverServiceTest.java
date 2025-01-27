@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
@@ -56,7 +57,7 @@ class CaregiverServiceTest {
 		Long patientId = patientRepository.save(patient).getId();
 
 		Caregiver caregiver = CaregiverUtil.createCaregiver("아들", caregiverAccount);
-		caregiverRepository.save(caregiver).getId();
+		caregiverRepository.save(caregiver);
 
 		//when
 		Long patientCaregiverId = caregiverService.registerPatient(caregiverAccount, patientId, "모자");
@@ -101,5 +102,49 @@ class CaregiverServiceTest {
 				tuple("김필순", "profileImageUrl2", "모자", true)
 			);
 	}
+
+	@DisplayName("존재하지 않는 환자는 등록하려는 경우 예외가 발생한다.")
+	@Test
+	void patientCannotBeRegisteredIfNotExists() {
+		//given
+		Account patientAccount = AccountUtil.createAccount("patient@daum.net", KAKAO);
+		Account caregiverAccount = AccountUtil.createAccount("caregiver@daum.net", KAKAO);
+		accountRepository.saveAll(List.of(patientAccount, caregiverAccount));
+
+		Patient patient = PatientUtil.createPatient("알츠하이머", patientAccount);
+		Long patientId = patientRepository.save(patient).getId();
+
+		Caregiver caregiver = CaregiverUtil.createCaregiver("아들", caregiverAccount);
+		caregiverRepository.save(caregiver);
+
+		//when //then
+		assertThatThrownBy(() -> caregiverService.registerPatient(caregiverAccount, patientId + 1, "모자"))
+			.isInstanceOf(ApiException.class)
+			.hasMessage("환자 정보가 존재하지 않습니다.");
+	}
+
+	@DisplayName("이미 등록된 환자를 다시 등록할 경우 예외가 발생한다.")
+	@Test
+	void CannotRegisterAlreadyRegisteredPatient() {
+		//given
+		Account patientAccount = AccountUtil.createAccount("patient@daum.net", KAKAO);
+		Account caregiverAccount = AccountUtil.createAccount("caregiver@daum.net", KAKAO);
+		accountRepository.saveAll(List.of(patientAccount, caregiverAccount));
+
+		Patient patient = PatientUtil.createPatient("알츠하이머", patientAccount);
+		Long patientId = patientRepository.save(patient).getId();
+
+		Caregiver caregiver = CaregiverUtil.createCaregiver("아들", caregiverAccount);
+		caregiverRepository.save(caregiver);
+
+		caregiverService.registerPatient(caregiverAccount, patientId, "모자");
+
+		//when //then
+		assertThatThrownBy(() -> caregiverService.registerPatient(caregiverAccount, patientId, "모자"))
+			.isInstanceOf(ApiException.class)
+			.hasMessage("이미 등록된 환자입니다.");
+	}
+
+
 
 }

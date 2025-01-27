@@ -33,6 +33,10 @@ public class CaregiverService {
 		Caregiver caregiver = caregiverRepository.findByAccount_Id(account.getId())
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
 
+		if (patientCaregiverRepository.findByPatientAndCaregiver(patient, caregiver).isPresent()) {
+			throw new ApiException(ErrorCode.ALREADY_EXISTS_PATIENT_CAREGIVER);
+		}
+
 		PatientCaregiver patientCaregiver = PatientCaregiver.builder()
 			.patient(patient)
 			.caregiver(caregiver)
