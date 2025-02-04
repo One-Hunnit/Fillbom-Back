@@ -17,10 +17,12 @@ public enum ErrorCode {
 
 	NOT_EXIST_ACCOUNT(400, "계정 정보가 존재하지 않습니다.", 801),
 	NOT_EXIST_EMAIL(400, "이메일 정보가 존재하지 않습니다.", 802),
+	NOT_EXIST_ROLE(400, "역할 정보가 존재하지 않습니다.", 803),
 
 	NOT_EXIST_DISTRICT(400, "행정 구역 정보가 존재하지 않습니다.", 901),
 
-	NOT_EXITS_DIARY(400, "일기 정보가 존재하지 않습니다.", 2001),
+	NOT_EXIST_DIARY(400, "일기 정보가 존재하지 않습니다.", 2001),
+	NOT_SHARED_DIARY(400, "공유하지 않은 일기는 조회할 수 없습니다.", 2002),
 
 	NOT_EXISTS_PATIENT_CAREGIVER(400, "환자-보호자 정보가 존재하지 않습니다.", 2101),
 	ALREADY_EXISTS_PATIENT_CAREGIVER(400, "이미 등록된 환자입니다.", 2102),

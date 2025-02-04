@@ -44,6 +44,9 @@ public class Account extends BaseTimeEntity {
 
 	private String birthday;
 
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
 	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Patient patient;
 
@@ -56,6 +59,7 @@ public class Account extends BaseTimeEntity {
 		this.gender = Gender.valueOf(requestDto.getGender());
 		this.birthday = requestDto.getBirthday();
 		this.profileImageUrl = requestDto.getProfileImageUrl();
+		this.role = Role.valueOf(requestDto.getRole());
 
 		return this;
 	}
