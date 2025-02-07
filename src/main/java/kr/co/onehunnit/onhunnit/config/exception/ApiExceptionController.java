@@ -46,13 +46,19 @@ public class ApiExceptionController {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException exception) {
 		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), 500, 500);
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(ExpiredJwtException.class)
 	public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException exception) {
 		ErrorResponse errorResponse = new ErrorResponse("JWT 토큰이 만료되었습니다. RefreshToken으로 재로그인해주세요", 401, 401);
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+	}
+
+	@ExceptionHandler(NullPointerException.class)
+	public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException exception) {
+		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), 500, 500);
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

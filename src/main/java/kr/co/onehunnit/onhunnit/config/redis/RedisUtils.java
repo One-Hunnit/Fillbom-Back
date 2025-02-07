@@ -3,6 +3,7 @@ package kr.co.onehunnit.onhunnit.config.redis;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import kr.co.onehunnit.onhunnit.config.exception.ApiException;
 import kr.co.onehunnit.onhunnit.dto.location.LocationRequestDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,23 @@ public class RedisUtils {
 			.latitude(latitude)
 			.longitude(longitude)
 			.build();
+	}
+
+	public String saveDeviceTokenInRedis(Long accountId, String deviceToken) {
+		String key = accountId + "'s deviceToken";
+		redisTemplate.opsForValue().set(key, deviceToken);
+		return key;
+	}
+
+	public String getDeviceTokenByAccountID(Long accountId) {
+		String key = accountId + "'s deviceToken";
+		String deviceToken = (String) redisTemplate.opsForValue().get(key);
+
+		if (deviceToken == null) {
+			throw new NullPointerException("해당 accountId에 맞는 deviceToken 값이 없습니다.");
+		}
+
+		return deviceToken;
 	}
 
 }
