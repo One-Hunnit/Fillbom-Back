@@ -4,6 +4,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import kr.co.onehunnit.onhunnit.config.exception.ApiException;
+import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.dto.location.LocationRequestDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class RedisUtils {
 		String deviceToken = (String) redisTemplate.opsForValue().get(key);
 
 		if (deviceToken == null) {
-			throw new NullPointerException("해당 accountId에 맞는 deviceToken 값이 없습니다.");
+			throw new ApiException(ErrorCode.NOT_EXISTS_DEVICE_TOKEN);
 		}
 
 		return deviceToken;

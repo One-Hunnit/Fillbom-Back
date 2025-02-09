@@ -49,7 +49,7 @@ public class NotificationController {
 
 	@Operation(summary = "알림 읽음 처리")
 	@GetMapping("/{notificationId}/read")
-	public ResponseDto<Void> readNotification(HttpServletRequest request, @PathVariable Long notificationId) {
+	public ResponseDto<String> readNotification(HttpServletRequest request, @PathVariable Long notificationId) {
 		notificationService.readNotification(request.getHeader("Authorization"), notificationId);
 		return ResponseUtil.SUCCESS("알림 읽음에 성공하였습니다.", null);
 	}

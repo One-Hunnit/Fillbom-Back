@@ -31,6 +31,8 @@ public enum ErrorCode {
 	NOT_EXISTS_ACCOUNT_NOTIFICATION(400, "유저-알림 정보가 존재하지 않습니다.", 2202),
 	NOT_EXISTS_RECEIVER_ACCOUNT(400, "수신자의 계정 정보가 존재하지 않습니다.", 2203),
 
+	NOT_EXISTS_DEVICE_TOKEN(400, "해당 accountId에 맞는 deviceToken 값이 없습니다.", 2301),
+
 	INVALID_TOKEN(401, "유효하지 않은 토큰입니다.", 1001),
 	UNKNOWN_ERROR(401, "토큰이 존재하지 않습니다.", 1002),
 	WRONG_TYPE_TOKEN(401, "변조된 토큰입니다.", 1003),
