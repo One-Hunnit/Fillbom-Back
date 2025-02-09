@@ -28,7 +28,10 @@ public enum ErrorCode {
 	ALREADY_EXISTS_PATIENT_CAREGIVER(400, "이미 등록된 환자입니다.", 2102),
 
 	NOT_EXISTS_NOTIFICATION(400, "알림 정보가 존재하지 않습니다.", 2201),
-	NOT_EXISTS_ACCOUNT_NOTIFICATION(400, "유저-알림 정보가 존재하지 않습니다.", 2201),
+	NOT_EXISTS_ACCOUNT_NOTIFICATION(400, "유저-알림 정보가 존재하지 않습니다.", 2202),
+	NOT_EXISTS_RECEIVER_ACCOUNT(400, "수신자의 계정 정보가 존재하지 않습니다.", 2203),
+
+	NOT_EXISTS_DEVICE_TOKEN(400, "해당 accountId에 맞는 deviceToken 값이 없습니다.", 2301),
 
 	INVALID_TOKEN(401, "유효하지 않은 토큰입니다.", 1001),
 	UNKNOWN_ERROR(401, "토큰이 존재하지 않습니다.", 1002),
@@ -47,6 +50,7 @@ public enum ErrorCode {
 	NOT_VALIDATE_EMAIL(401, "인증받지 못한 이메일입니다.", 1015),
 	FAIL_TO_DECODE(401, "헤더 디코딩에 실패했습니다.", 1016),
 	FAIL_TO_GET_PUBLIC_KEY(401, "공개 키를 가져오는 데 실패했습니다.", 1017),
+	UNAUTHORIZED_NOTIFICATION(401, "권한이 없는 사용자의 알림을 읽을 수 없습니다.", 1018),
 	;
 
 

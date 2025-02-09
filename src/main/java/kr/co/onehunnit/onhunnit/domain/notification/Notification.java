@@ -1,6 +1,8 @@
 package kr.co.onehunnit.onhunnit.domain.notification;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,12 +27,24 @@ public class Notification extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String title;
+	@Enumerated(EnumType.STRING)
+	private Type type;
 
+	private String deepLink;
+	private boolean isRead;
+	private String title;
 	private String body;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "account_id")
-	private Account account;
+	@JoinColumn(name = "sender_id")
+	private Account sender;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "receiver_id")
+	private Account receiver;
+
+	public void read() {
+		this.isRead = true;
+	}
 
 }
