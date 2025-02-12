@@ -37,7 +37,7 @@ import kr.co.onehunnit.onhunnit.dto.token.TokenInfoDto;
 class JwtTokenProviderTest {
 
 	private static Key key;
-	private static final int ACCESSTOKEN_EXPIRATION_TIME = 1;
+	private static final int ACCESS_TOKEN_EXPIRATION_TIME = 1;
 
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
@@ -69,7 +69,7 @@ class JwtTokenProviderTest {
 		Authentication authentication = createAuthentication();
 		String accessToken = jwtTokenProvider.generateToken(authentication).getAccessToken();
 		String malformedToken = accessToken + "malformed";
-		String expiredToken = createToken(authentication, ACCESSTOKEN_EXPIRATION_TIME);
+		String expiredToken = createToken(authentication, ACCESS_TOKEN_EXPIRATION_TIME);
 
 		String[] tokenParts = accessToken.split("\\.");
 		String header = tokenParts[0];
