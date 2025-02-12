@@ -2,7 +2,8 @@ name: Auto deploy to NCP
 
 on:
   push:
-    branches: [ "develope" ]
+    branches: [ "develop" ]
+
 permissions:
   contents: read
   issues: read
