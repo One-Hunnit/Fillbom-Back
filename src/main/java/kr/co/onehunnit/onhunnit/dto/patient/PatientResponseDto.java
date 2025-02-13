@@ -11,6 +11,7 @@ public class PatientResponseDto {
 	@Getter
 	@Builder
 	public static class BriefDetail {
+		private Long patientId;
 		private String profileImageUrl;
 		private String name;
 		private String relationship;
@@ -18,6 +19,7 @@ public class PatientResponseDto {
 
 		public static BriefDetail of(Account account, PatientCaregiver patientCaregiver) {
 			return BriefDetail.builder()
+				.patientId(patientCaregiver.getPatient().getId())
 				.profileImageUrl(account.getProfileImageUrl())
 				.name(account.getName())
 				.relationship(patientCaregiver.getRelationship())
