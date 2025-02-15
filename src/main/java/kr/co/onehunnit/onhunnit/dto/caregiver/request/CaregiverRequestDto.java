@@ -1,4 +1,4 @@
-package kr.co.onehunnit.onhunnit.dto.caregiver;
+package kr.co.onehunnit.onhunnit.dto.caregiver.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

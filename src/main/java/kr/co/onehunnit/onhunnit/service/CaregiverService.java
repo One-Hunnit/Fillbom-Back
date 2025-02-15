@@ -12,6 +12,7 @@ import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
 import kr.co.onehunnit.onhunnit.domain.patient_Caregiver.PatientCaregiver;
+import kr.co.onehunnit.onhunnit.dto.caregiver.response.CaregiverResponseDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientResponseDto;
 import kr.co.onehunnit.onhunnit.repository.CaregiverRepository;
 import kr.co.onehunnit.onhunnit.repository.PatientCaregiverRepository;
@@ -27,7 +28,7 @@ public class CaregiverService {
 	private final PatientRepository patientRepository;
 	private final PatientCaregiverRepository patientCaregiverRepository;
 
-	public Long registerPatient(Account account, Long patientId, String relationship) {
+	public CaregiverResponseDto registerPatient(Account account, Long patientId, String relationship) {
 		Patient patient = patientRepository.findById(patientId)
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
 		Caregiver caregiver = caregiverRepository.findByAccount_Id(account.getId())
@@ -44,14 +45,15 @@ public class CaregiverService {
 			.isAccepted(false)
 			.build();
 
-		return patientCaregiverRepository.save(patientCaregiver).getId();
+		Long patientCaregiverId = patientCaregiverRepository.save(patientCaregiver).getId();
+		return CaregiverResponseDto.of(patientCaregiverId);
 	}
 
 	public List<PatientResponseDto.BriefDetail> getPatientsList(Account account) {
 		Caregiver caregiver = caregiverRepository.findByAccount_Id(account.getId())
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
 
-		return patientCaregiverRepository.findAllByCaregiverAndIsAcceptedTrue(caregiver).stream()
+		return patientCaregiverRepository.findAllByCaregiver(caregiver).stream()
 			.map(this::convertToBrief)
 			.collect(Collectors.toList());
 	}

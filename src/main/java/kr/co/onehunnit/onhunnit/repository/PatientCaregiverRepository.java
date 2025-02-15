@@ -15,5 +15,5 @@ public interface PatientCaregiverRepository extends JpaRepository<PatientCaregiv
 
 	Optional<PatientCaregiver> findByPatientAndCaregiver(Patient patient, Caregiver caregiver);
 
-	List<PatientCaregiver> findAllByCaregiverAndIsAcceptedTrue(Caregiver caregiver);
+	List<PatientCaregiver> findAllByCaregiver(Caregiver caregiver);
 }

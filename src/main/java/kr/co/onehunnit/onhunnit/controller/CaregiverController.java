@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import kr.co.onehunnit.onhunnit.config.response.ResponseDto;
 import kr.co.onehunnit.onhunnit.config.response.ResponseUtil;
 import kr.co.onehunnit.onhunnit.domain.account.AccountDetails;
-import kr.co.onehunnit.onhunnit.dto.caregiver.CaregiverRequestDto;
+import kr.co.onehunnit.onhunnit.dto.caregiver.request.CaregiverRequestDto;
+import kr.co.onehunnit.onhunnit.dto.caregiver.response.CaregiverResponseDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientResponseDto;
 import kr.co.onehunnit.onhunnit.service.CaregiverService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class CaregiverController {
 
 	@Operation(summary = "환자 등록 요청", description = "jwt 토큰 필요")
 	@PostMapping("/registration/patients/{patientId}")
-	public ResponseDto<Long> registerCaregiver(@AuthenticationPrincipal AccountDetails accountDetails,
+	public ResponseDto<CaregiverResponseDto> registerCaregiver(@AuthenticationPrincipal AccountDetails accountDetails,
 		@PathVariable Long patientId,
 		@RequestBody CaregiverRequestDto.Registration registration) {
 		return ResponseUtil.SUCCESS("환자 등록에 성공하였습니다.",
