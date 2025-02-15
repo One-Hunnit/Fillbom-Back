@@ -53,7 +53,7 @@ public class CaregiverService {
 		Caregiver caregiver = caregiverRepository.findByAccount_Id(account.getId())
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
 
-		return patientCaregiverRepository.findAllByCaregiverAndIsAcceptedTrue(caregiver).stream()
+		return patientCaregiverRepository.findAllByCaregiver(caregiver).stream()
 			.map(this::convertToBrief)
 			.collect(Collectors.toList());
 	}
