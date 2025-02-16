@@ -16,6 +16,7 @@ import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
 import kr.co.onehunnit.onhunnit.domain.patient_Caregiver.PatientCaregiver;
+import kr.co.onehunnit.onhunnit.dto.caregiver.response.CaregiverResponseDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientResponseDto;
 import kr.co.onehunnit.onhunnit.repository.AccountRepository;
 import kr.co.onehunnit.onhunnit.repository.CaregiverRepository;
@@ -60,15 +61,15 @@ class CaregiverServiceTest {
 		caregiverRepository.save(caregiver);
 
 		//when
-		Long patientCaregiverId = caregiverService.registerPatient(caregiverAccount, patientId, "모자");
+		CaregiverResponseDto responseDto = caregiverService.registerPatient(caregiverAccount, patientId, "모자");
 
 		//then
-		assertThat(patientCaregiverRepository.findById(patientCaregiverId).get())
+		assertThat(patientCaregiverRepository.findById(responseDto.getPatientCaregiverId()).get())
 			.extracting("relationship", "isAccepted")
 			.contains("모자", false);
 	}
 
-	@DisplayName("보호자는 등록을 수락한 환자의 목록만 조회할 수 있다. 등록을 수락하지 않으면 조회할 수 없다.")
+	@DisplayName("보호자는 환자의 목록을 조회할 수 있다.")
 	@Test
 	void getPatientsListOnlyAcceptedTrue() {
 		//given
@@ -95,11 +96,12 @@ class CaregiverServiceTest {
 		List<PatientResponseDto.BriefDetail> patientsList = caregiverService.getPatientsList(caregiverAccount);
 
 		//then
-		assertThat(patientsList).hasSize(2)
+		assertThat(patientsList).hasSize(3)
 			.extracting("name", "profileImageUrl", "relationship", "isAccepted")
 			.containsExactlyInAnyOrder(
 				tuple("김필봄", "profileImageUrl1", "모자", true),
-				tuple("김필순", "profileImageUrl2", "모자", true)
+				tuple("김필순", "profileImageUrl2", "모자", true),
+				tuple("김필자", "profileImageUrl3", "모자", false)
 			);
 	}
 

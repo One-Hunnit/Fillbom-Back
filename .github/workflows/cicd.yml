@@ -1,6 +1,8 @@
 name: Auto deploy to NCP
 
 on:
+  pull_request:
+    branches: [ "develop" ]
   push:
     branches: [ "develop" ]
 
@@ -59,6 +61,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
 
     steps:
       - name: NCP login and docker image pull and run
