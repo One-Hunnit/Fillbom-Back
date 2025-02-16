@@ -1,6 +1,8 @@
 name: Auto deploy to NCP
 
 on:
+  pull_request:
+    branches: [ "develop" ]
   push:
     branches: [ "develop" ]
 
