@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,13 +32,21 @@ public class PatientController {
 	private final PatientService patientService;
 	private final RedisUtils redisUtils;
 
-	@Operation(summary = "보호자 등록 요청 수락", description = "jwt 토큰 필요")
-	@PostMapping("/registration/caregivers/{caregiverId}")
-	public ResponseDto<Long> registerCaregiver(@AuthenticationPrincipal AccountDetails accountDetails,
-		@PathVariable Long caregiverId) {
+	@Operation(summary = "보호자 등록 요청 수락", description = "jwt 토큰 필요, 수락은 status = ACCEPT, 거절은 status = REJECT")
+	@PostMapping("/registration/caregivers/{caregiverId}/accept")
+	public ResponseDto<Long> acceptCaregiverRegistration(@AuthenticationPrincipal AccountDetails accountDetails,
+		@PathVariable Long caregiverId, @RequestParam String status) {
 		return ResponseUtil.SUCCESS("보호자 등록 요청 수락에 성공하였습니다.",
-			patientService.registerCaregiver(accountDetails.getAccount(), caregiverId));
+			patientService.handleRegistration(accountDetails.getAccount(), caregiverId, status));
 	}
+
+	// @Operation(summary = "보호자 등록 요청 거절", description = "jwt 토큰 필요")
+	// @PostMapping("/registration/caregivers/{caregiverId}/reject")
+	// public ResponseDto<Long> rejectCaregiverRegistration(@AuthenticationPrincipal AccountDetails accountDetails,
+	// 	@PathVariable Long caregiverId) {
+	// 	return ResponseUtil.SUCCESS("보호자 등록 요청 거절에 성공하였습니다.",
+	// 		patientService.rejectRegistration(accountDetails.getAccount(), caregiverId));
+	// }
 
 	@Operation(summary = "전화번호로 환자 검색")
 	@PostMapping("/search")

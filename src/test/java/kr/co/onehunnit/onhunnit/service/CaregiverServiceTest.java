@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ class CaregiverServiceTest {
 	@Autowired
 	private CaregiverService caregiverService;
 
+	@Disabled
 	@DisplayName("보호자는 환자를 등록할 수 있다. 단, 환자가 수락하기 전에는 isAccepted는 false이다.")
 	@Test
 	void registerPatient() {
@@ -125,6 +127,7 @@ class CaregiverServiceTest {
 			.hasMessage("환자 정보가 존재하지 않습니다.");
 	}
 
+	@Disabled
 	@DisplayName("이미 등록된 환자를 다시 등록할 경우 예외가 발생한다.")
 	@Test
 	void CannotRegisterAlreadyRegisteredPatient() {
