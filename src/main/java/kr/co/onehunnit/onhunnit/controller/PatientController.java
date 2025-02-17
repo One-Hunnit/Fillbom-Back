@@ -40,14 +40,6 @@ public class PatientController {
 			patientService.handleRegistration(accountDetails.getAccount(), caregiverId, status));
 	}
 
-	// @Operation(summary = "보호자 등록 요청 거절", description = "jwt 토큰 필요")
-	// @PostMapping("/registration/caregivers/{caregiverId}/reject")
-	// public ResponseDto<Long> rejectCaregiverRegistration(@AuthenticationPrincipal AccountDetails accountDetails,
-	// 	@PathVariable Long caregiverId) {
-	// 	return ResponseUtil.SUCCESS("보호자 등록 요청 거절에 성공하였습니다.",
-	// 		patientService.rejectRegistration(accountDetails.getAccount(), caregiverId));
-	// }
-
 	@Operation(summary = "전화번호로 환자 검색")
 	@PostMapping("/search")
 	public ResponseDto<List<PatientResponseDto.Phone>> searchByPhone(@RequestBody PatientRequestDto.Phone phoneDto) {
