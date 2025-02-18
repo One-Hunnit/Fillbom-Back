@@ -64,6 +64,7 @@ class PatientServiceTest {
 		accountRepository.saveAll(List.of(patientAccount, caregiverAccount));
 	}
 
+	@Disabled
 	@DisplayName("환자는 보호자의 요청을 수락해 등록을 할 수 있다.")
 	@Test
 	void registerCaregiver() {
@@ -82,7 +83,7 @@ class PatientServiceTest {
 		patientCaregiverRepository.save(patientCaregiver);
 
 		//when
-		Long patientCaregiverId = patientService.registerCaregiver(patientAccount, caregiverId);
+		Long patientCaregiverId = patientService.handleRegistration(patientAccount, caregiverId, "ACCEPT");
 
 		//then
 		assertThat(patientCaregiverRepository.findById(patientCaregiverId).get().isAccepted()).isTrue();

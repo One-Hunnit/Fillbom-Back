@@ -44,7 +44,7 @@ public class NotificationService {
 		saveNotification(infoDto, sender, receiver);
 	}
 
-	private void sendPushNotification(String deviceToken, NotificationRequestDto.Info infoDto) {
+	public void sendPushNotification(String deviceToken, NotificationRequestDto.Info infoDto) {
 		webClientBuilder.build()
 			.post()
 			.uri(EXPO_BACKEND_URI)
@@ -56,7 +56,7 @@ public class NotificationService {
 			.block();
 	}
 
-	private void saveNotification(NotificationRequestDto.Info infoDto, Account sender, Account receiver) {
+	public void saveNotification(NotificationRequestDto.Info infoDto, Account sender, Account receiver) {
 		Notification notification = NotificationRequestDto.Info.toEntity(infoDto, sender, receiver);
 		notificationRepository.save(notification);
 	}
