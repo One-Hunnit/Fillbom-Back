@@ -60,7 +60,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/fillbom
 
   deploy:
-    needs: build
+#    needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
