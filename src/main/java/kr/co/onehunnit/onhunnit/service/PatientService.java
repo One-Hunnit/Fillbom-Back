@@ -87,7 +87,7 @@ public class PatientService {
 		}
 
 		PatientResponseDto.Location location = redisUtils.getLocationByPatientId(patientId);
-		return PatientResponseDto.Detail.of(account, location);
+		return PatientResponseDto.Detail.of(patient.getAccount(), location);
 	}
 
 	private boolean isNotCaregiverOfPatient(Caregiver caregiver, Patient patient) {
