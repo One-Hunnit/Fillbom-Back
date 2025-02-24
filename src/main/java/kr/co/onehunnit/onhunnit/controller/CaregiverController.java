@@ -3,6 +3,7 @@ package kr.co.onehunnit.onhunnit.controller;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,14 @@ public class CaregiverController {
 		@AuthenticationPrincipal AccountDetails accountDetails) {
 		return ResponseUtil.SUCCESS("환자 목록 조회에 성공하였습니다.",
 			caregiverService.getPatientsList(accountDetails.getAccount()));
+	}
+
+	@Operation(summary = "환자 삭제")
+	@DeleteMapping("/patients/{patientId}")
+	public ResponseDto<String> deletePatient(@AuthenticationPrincipal AccountDetails accountDetails,
+		@PathVariable Long patientId) {
+		caregiverService.deletePatient(accountDetails.getAccount(), patientId);
+		return ResponseUtil.SUCCESS("환자 정보 삭제에 성공하였습니다.", null);
 	}
 
 }
