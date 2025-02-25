@@ -88,4 +88,24 @@ public class CaregiverService {
 
 		return PatientResponseDto.BriefDetail.of(patient.getAccount(), patientCaregiver);
 	}
+
+	public void deletePatient(Account account, Long patientId) {
+		Patient patient = patientRepository.findById(patientId)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
+
+		Caregiver caregiver = caregiverRepository.findByAccount_Id(account.getId())
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
+
+		if (isNotCaregiverOfPatient(caregiver, patient)) {
+			throw new ApiException(ErrorCode.UNAUTHORIZED_ACCESS);
+		}
+
+		patientCaregiverRepository.deleteByPatient(patient);
+	}
+
+	private boolean isNotCaregiverOfPatient(Caregiver caregiver, Patient patient) {
+		return caregiver.getPatientCaregiverList().stream()
+			.noneMatch(pc -> pc.getPatient().equals(patient));
+	}
+
 }
