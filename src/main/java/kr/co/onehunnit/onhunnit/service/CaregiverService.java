@@ -108,4 +108,10 @@ public class CaregiverService {
 			.noneMatch(pc -> pc.getPatient().equals(patient));
 	}
 
+	public CaregiverResponseDto.Id getCaregiverId(Account account) {
+		Caregiver caregiver = caregiverRepository.findByAccount_Id(account.getId())
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_CAREGIVER));
+
+		return CaregiverResponseDto.Id.of(caregiver.getId());
+	}
 }

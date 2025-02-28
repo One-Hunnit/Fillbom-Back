@@ -15,4 +15,16 @@ public class CaregiverResponseDto {
 			.build();
 	}
 
+	@Getter
+	@Builder
+	public static class Id {
+		Long caregiverId;
+
+		public static Id of(Long caregiverId) {
+			return Id.builder()
+				.caregiverId(caregiverId)
+				.build();
+		}
+	}
+
 }
