@@ -15,10 +15,6 @@ public class RedisUtils {
 
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	public void deleteData(String key) {
-		redisTemplate.delete(key);
-	}
-
 	public void saveLocationInRedis(Long patient, LocationRequestDto locationRequestDto) {
 		String latKey = "patient:location:" + patient + ":latitude";
 		String lonKey = "patient:location:" + patient + ":longitude";
@@ -44,6 +40,14 @@ public class RedisUtils {
 			.build();
 	}
 
+	public void deleteLocationByPatientId(Long patientId) {
+		String latKey = "patient:location:" + patientId + ":latitude";
+		String lonKey = "patient:location:" + patientId + ":longitude";
+
+		redisTemplate.delete(latKey);
+		redisTemplate.delete(lonKey);
+	}
+
 	public String saveDeviceTokenInRedis(Long accountId, String deviceToken) {
 		String key = accountId + "'s deviceToken";
 		redisTemplate.opsForValue().set(key, deviceToken);
@@ -59,6 +63,11 @@ public class RedisUtils {
 		}
 
 		return deviceToken;
+	}
+
+	public void deleteDeviceTokenByAccountID(Long accountId) {
+		String key = accountId + "'s deviceToken";
+		redisTemplate.delete(key);
 	}
 
 }
