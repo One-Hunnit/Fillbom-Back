@@ -56,4 +56,10 @@ public class CaregiverController {
 		return ResponseUtil.SUCCESS("환자 정보 삭제에 성공하였습니다.", null);
 	}
 
+	@Operation(summary = "보호자 Id 조회")
+	@GetMapping("/id")
+	public ResponseDto<CaregiverResponseDto.Id> getCaregiverId(@AuthenticationPrincipal AccountDetails accountDetails) {
+		return ResponseUtil.SUCCESS("보호자 ID 조회에 성공하였습니다.", caregiverService.getCaregiverId(accountDetails.getAccount()));
+	}
+
 }
