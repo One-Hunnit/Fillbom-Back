@@ -19,6 +19,6 @@ public interface PatientCaregiverRepository extends JpaRepository<PatientCaregiv
 
 	List<PatientCaregiver> findAllByCaregiverAndIsAcceptedTrue(Caregiver caregiver);
 
-	void deleteByPatient(Patient patient);
+	void delete(PatientCaregiver patientCaregiver);
 
 }

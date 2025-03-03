@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.jsonwebtoken.JwtException;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
+import kr.co.onehunnit.onhunnit.config.redis.RedisUtils;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
@@ -19,20 +20,24 @@ import kr.co.onehunnit.onhunnit.dto.account.AccountResponseDto;
 import kr.co.onehunnit.onhunnit.dto.account.TokenAccountInfoDto;
 import kr.co.onehunnit.onhunnit.repository.AccountRepository;
 import kr.co.onehunnit.onhunnit.repository.CaregiverRepository;
+import kr.co.onehunnit.onhunnit.repository.NotificationRepository;
 import kr.co.onehunnit.onhunnit.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AccountService {
 
 	private final AccountRepository accountRepository;
 	private final PatientRepository patientRepository;
 	private final CaregiverRepository caregiverRepository;
+	private final NotificationRepository notificationRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final LocationService locationService;
+	private final RedisUtils redisUtils;
 
+	@Transactional
 	public String signUp(Account account, AccountRequestDto.SignUp requestDto) {
 		accountRepository.save(account.signUp(requestDto));
 
@@ -47,17 +52,22 @@ public class AccountService {
 		return requestDto.getProfileImageUrl();
 	}
 
+	@Transactional
 	public AccountResponseDto.Info updateUserInfo(String accessToken, AccountRequestDto.Update updateDto) {
 		Account account = getAccountByToken(accessToken);
 		account.update(updateDto);
 		return AccountResponseDto.Info.of(account);
 	}
 
+	@Transactional
 	public void deleteAccount(String accessToken) {
 		Account account = getAccountByToken(accessToken);
 		if (account.getPatient() != null) {
 			locationService.deletePatientLocations(account.getPatient().getId());
 		}
+
+		notificationRepository.deleteBySenderOrReceiver(account, account);
+		redisUtils.deleteDeviceTokenByAccountID(account.getId());
 		accountRepository.delete(account);
 	}
 

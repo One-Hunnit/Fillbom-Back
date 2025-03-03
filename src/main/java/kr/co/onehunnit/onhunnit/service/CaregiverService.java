@@ -43,7 +43,6 @@ public class CaregiverService {
 
 		Long patientCaregiverId;
 		if (!patientCaregiverRepository.findByPatientAndCaregiver(patient, caregiver).isPresent()) {
-			// throw new ApiException(ErrorCode.ALREADY_EXISTS_PATIENT_CAREGIVER);
 			PatientCaregiver patientCaregiver = PatientCaregiver.builder()
 				.patient(patient)
 				.caregiver(caregiver)
@@ -89,6 +88,7 @@ public class CaregiverService {
 		return PatientResponseDto.BriefDetail.of(patient.getAccount(), patientCaregiver);
 	}
 
+	@Transactional
 	public void deletePatient(Account account, Long patientId) {
 		Patient patient = patientRepository.findById(patientId)
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
@@ -100,7 +100,13 @@ public class CaregiverService {
 			throw new ApiException(ErrorCode.UNAUTHORIZED_ACCESS);
 		}
 
-		patientCaregiverRepository.deleteByPatient(patient);
+		PatientCaregiver patientCaregiver = patientCaregiverRepository.findByPatientAndCaregiver(patient, caregiver)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXISTS_PATIENT_CAREGIVER));
+
+		caregiver.getPatientCaregiverList().remove(patientCaregiver);
+		patient.getPatientCaregiverList().remove(patientCaregiver);
+
+		patientCaregiverRepository.delete(patientCaregiver);
 	}
 
 	private boolean isNotCaregiverOfPatient(Caregiver caregiver, Patient patient) {
