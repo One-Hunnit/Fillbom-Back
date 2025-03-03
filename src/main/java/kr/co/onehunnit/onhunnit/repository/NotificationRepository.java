@@ -13,7 +13,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
 	Slice<Notification> findAllByReceiver(Account receiver, Pageable pageable);
 
-	// @Query("delete from Notification n where n.sender = :account or n.receiver = :account")
 	void deleteBySenderOrReceiver(Account sender, Account receiver);
 
 }
