@@ -39,8 +39,10 @@ public class NotificationService {
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXISTS_RECEIVER_ACCOUNT));
 
 		String deviceToken = redisUtils.getDeviceTokenByAccountID(infoDto.getReceiverId());
+		if (deviceToken != null) {
+			sendPushNotification(deviceToken, infoDto);
+		}
 
-		sendPushNotification(deviceToken, infoDto);
 		saveNotification(infoDto, sender, receiver);
 	}
 
