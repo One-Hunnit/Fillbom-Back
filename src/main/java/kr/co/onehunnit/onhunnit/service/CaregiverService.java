@@ -55,9 +55,6 @@ public class CaregiverService {
 			patientCaregiverId = patientCaregiverRepository.findByPatientAndCaregiver(patient, caregiver).get().getId();
 		}
 
-
-		String deviceToken = redisUtils.getDeviceTokenByAccountID(patientId);
-
 		NotificationRequestDto.Info notificationInfo = NotificationRequestDto.Info.builder()
 			.title(account.getName() + "님이 보호자 추가를 요청하였습니다.")
 			.type(RELATIONSHIP_REQUEST)
@@ -66,7 +63,10 @@ public class CaregiverService {
 			.body("") //todo 추가 예정
 			.build();
 
-		notificationService.sendPushNotification(deviceToken, notificationInfo);
+		String deviceToken = redisUtils.getDeviceTokenByAccountID(patientId);
+		if (deviceToken != null) {
+			notificationService.sendPushNotification(deviceToken, notificationInfo);
+		}
 		notificationService.saveNotification(notificationInfo, account, patient.getAccount());
 
 		return CaregiverResponseDto.of(patientCaregiverId);

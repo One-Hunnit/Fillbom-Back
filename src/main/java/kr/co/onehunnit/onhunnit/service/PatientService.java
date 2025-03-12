@@ -44,8 +44,6 @@ public class PatientService {
 		PatientCaregiver patientCaregiver = patientCaregiverRepository.findByPatientAndCaregiver(patient, caregiver)
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXISTS_PATIENT_CAREGIVER));
 
-		String deviceToken = redisUtils.getDeviceTokenByAccountID(caregiverId);
-
 		if (status.equals("ACCEPT")) {
 			patientCaregiver.register();
 		}
@@ -60,7 +58,11 @@ public class PatientService {
 			.body("") //todo 추가 예정
 			.build();
 
-		notificationService.sendPushNotification(deviceToken, notificationInfo);
+		String deviceToken = redisUtils.getDeviceTokenByAccountID(caregiverId);
+		if (deviceToken != null) {
+			notificationService.sendPushNotification(deviceToken, notificationInfo);
+		}
+
 		notificationService.saveNotification(notificationInfo, account, caregiver.getAccount());
 
 		return patientCaregiver.getId();

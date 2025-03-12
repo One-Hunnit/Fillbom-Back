@@ -58,10 +58,6 @@ public class RedisUtils {
 		String key = accountId + "'s deviceToken";
 		String deviceToken = (String) redisTemplate.opsForValue().get(key);
 
-		if (deviceToken == null) {
-			throw new ApiException(ErrorCode.NOT_EXISTS_DEVICE_TOKEN);
-		}
-
 		return deviceToken;
 	}
 
