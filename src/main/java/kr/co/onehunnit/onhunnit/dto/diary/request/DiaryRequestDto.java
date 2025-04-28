@@ -5,6 +5,7 @@ import java.util.List;
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.onehunnit.onhunnit.domain.diary.Diary;
 import kr.co.onehunnit.onhunnit.domain.diary.Emotion;
+import kr.co.onehunnit.onhunnit.domain.diary.Weather;
 import kr.co.onehunnit.onhunnit.domain.diarycontent.DiaryContent;
 import kr.co.onehunnit.onhunnit.domain.diarycontent.Type;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
@@ -17,7 +18,7 @@ public class DiaryRequestDto {
 	@Schema(description = "내용 목록")
 	private List<DiaryContentDto> contents;
 
-	@Schema(description = "날씨")
+	@Schema(description = "날씨(SUNNY, CLOUDY, RAINY, SNOWY, FOG")
 	private String weather;
 
 	@Schema(description = "감정상태(HAPPINESS,SADNESS,ANGER,ANXIETY,CALMNESS")
@@ -57,7 +58,7 @@ public class DiaryRequestDto {
 
 	public Diary toEntity(DiaryRequestDto requestDto, Patient patient) {
 		return Diary.builder()
-			.weather(requestDto.getWeather())
+			.weather(Weather.valueOf(requestDto.getWeather()))
 			.emotion(Emotion.valueOf(requestDto.getEmotion()))
 			.shared(requestDto.isShared())
 			.audioUrl(requestDto.getAudioUrl())

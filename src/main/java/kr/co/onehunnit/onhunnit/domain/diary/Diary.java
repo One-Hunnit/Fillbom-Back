@@ -33,7 +33,8 @@ public class Diary extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String weather;
+	@Enumerated(EnumType.STRING)
+	private Weather weather;
 
 	@Enumerated(EnumType.STRING)
 	private Emotion emotion;
