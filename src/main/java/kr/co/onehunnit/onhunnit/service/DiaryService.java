@@ -50,7 +50,10 @@ public class DiaryService {
 		Long diaryId = diaryRepository.save(diary).getId();
 
 		saveDiaryContents(diaryRequestDto.getContents(), diary);
-		saveDiaryPhotos(diaryRequestDto.getPhotos(), diary);
+
+		if (diaryRequestDto.getPhotos() != null) {
+			saveDiaryPhotos(diaryRequestDto.getPhotos(), diary);
+		}
 
 		return diaryId;
 	}

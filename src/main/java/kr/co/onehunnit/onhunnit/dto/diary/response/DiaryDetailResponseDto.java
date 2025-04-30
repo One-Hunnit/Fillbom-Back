@@ -5,6 +5,7 @@ import java.util.List;
 
 import kr.co.onehunnit.onhunnit.domain.diary.Diary;
 import kr.co.onehunnit.onhunnit.domain.diary.Emotion;
+import kr.co.onehunnit.onhunnit.domain.diary.Weather;
 import kr.co.onehunnit.onhunnit.domain.diarycontent.DiaryContent;
 import kr.co.onehunnit.onhunnit.domain.diarycontent.Type;
 import lombok.Builder;
@@ -17,7 +18,7 @@ public class DiaryDetailResponseDto {
 	private Long diaryId;
 	private Long patientId;
 	private List<ContentDto> contents;
-	private String weather;
+	private Weather weather;
 	private Emotion emotion;
 	private List<String> photos;
 	private LocalDateTime createdAt;
