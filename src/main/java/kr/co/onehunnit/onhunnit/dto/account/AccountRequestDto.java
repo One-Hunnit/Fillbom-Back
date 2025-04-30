@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.onehunnit.onhunnit.domain.account.Gender;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class AccountRequestDto {
 

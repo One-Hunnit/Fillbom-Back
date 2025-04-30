@@ -7,6 +7,7 @@ import kr.co.onehunnit.onhunnit.domain.account.Provider;
 import kr.co.onehunnit.onhunnit.domain.global.Role;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class TokenAccountInfoDto {

@@ -97,4 +97,11 @@ public class PatientService {
 			.noneMatch(pc -> pc.getPatient().equals(patient));
 	}
 
+	public PatientResponseDto.Id getPatientId(Account account) {
+		Patient patient = patientRepository.findByAccount_Id(account.getId())
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_PATIENT));
+
+		return PatientResponseDto.Id.of(patient.getId());
+	}
+
 }
