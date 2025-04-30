@@ -18,7 +18,7 @@ public class DiaryRequestDto {
 	@Schema(description = "내용 목록")
 	private List<DiaryContentDto> contents;
 
-	@Schema(description = "날씨(SUNNY, CLOUDY, RAINY, SNOWY, FOG")
+	@Schema(description = "날씨(SUNNY, CLOUDY, RAINY, SNOWY, FOG)")
 	private String weather;
 
 	@Schema(description = "감정상태(HAPPINESS,SADNESS,ANGER,ANXIETY,CALMNESS")
