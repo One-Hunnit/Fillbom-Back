@@ -17,6 +17,7 @@ import kr.co.onehunnit.onhunnit.config.redis.RedisUtils;
 import kr.co.onehunnit.onhunnit.config.response.ResponseDto;
 import kr.co.onehunnit.onhunnit.config.response.ResponseUtil;
 import kr.co.onehunnit.onhunnit.domain.account.AccountDetails;
+import kr.co.onehunnit.onhunnit.dto.caregiver.response.CaregiverResponseDto;
 import kr.co.onehunnit.onhunnit.dto.location.LocationRequestDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientRequestDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientResponseDto;
@@ -61,6 +62,12 @@ public class PatientController {
 		@AuthenticationPrincipal AccountDetails accountDetails, @PathVariable Long patientId) {
 		return ResponseUtil.SUCCESS("환자 상세 조회에 성공하였습니다.",
 			patientService.getPatientDetail(accountDetails.getAccount(), patientId));
+	}
+
+	@Operation(summary = "환자 Id 조회")
+	@GetMapping("/id")
+	public ResponseDto<PatientResponseDto.Id> getCaregiverId(@AuthenticationPrincipal AccountDetails accountDetails) {
+		return ResponseUtil.SUCCESS("환자 ID 조회에 성공하였습니다.", patientService.getPatientId(accountDetails.getAccount()));
 	}
 
 }

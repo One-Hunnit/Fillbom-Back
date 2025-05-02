@@ -3,6 +3,7 @@ package kr.co.onehunnit.onhunnit.dto.patient;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Gender;
 import kr.co.onehunnit.onhunnit.domain.patient_Caregiver.PatientCaregiver;
+import kr.co.onehunnit.onhunnit.dto.caregiver.response.CaregiverResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -73,6 +74,18 @@ public class PatientResponseDto {
 	public static class Location {
 		private String latitude;
 		private String longitude;
+	}
+
+	@Getter
+	@Builder
+	public static class Id {
+		private Long patientId;
+
+		public static PatientResponseDto.Id of(Long patientId) {
+			return Id.builder()
+				.patientId(patientId)
+				.build();
+		}
 	}
 
 }

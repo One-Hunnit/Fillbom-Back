@@ -2,11 +2,17 @@ package kr.co.onehunnit.onhunnit.dto.notification;
 
 import static kr.co.onehunnit.onhunnit.domain.notification.Type.*;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.notification.Notification;
 import kr.co.onehunnit.onhunnit.domain.notification.Type;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 
 public class NotificationRequestDto {
 
@@ -14,6 +20,11 @@ public class NotificationRequestDto {
 	@Builder
 	public static class DeviceToken {
 		private String deviceToken;
+
+		@JsonCreator
+		public DeviceToken(String deviceToken) {
+			this.deviceToken = deviceToken;
+		}
 	}
 
 	@Getter

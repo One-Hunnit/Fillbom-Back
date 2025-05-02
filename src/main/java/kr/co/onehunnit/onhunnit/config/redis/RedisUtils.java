@@ -3,8 +3,6 @@ package kr.co.onehunnit.onhunnit.config.redis;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import kr.co.onehunnit.onhunnit.config.exception.ApiException;
-import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.dto.location.LocationRequestDto;
 import kr.co.onehunnit.onhunnit.dto.patient.PatientResponseDto;
 import lombok.RequiredArgsConstructor;
