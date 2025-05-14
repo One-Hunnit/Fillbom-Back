@@ -64,6 +64,7 @@ public class SecurityConfig {
 				.requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 				.requestMatchers("/accounts/sign-up").permitAll()
 				.requestMatchers("/accounts/sign-in").permitAll()
+				.requestMatchers("/accounts/role/**").permitAll()
 				.requestMatchers("/location").permitAll()
 				.anyRequest().authenticated()) //나머지 요청은 인증 필요
 

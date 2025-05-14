@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,10 @@ public class AccountController {
 
 	@Operation(summary = "회원가입")
 	@PostMapping("/sign-up")
-	public ResponseDto<String> signUp(@AuthenticationPrincipal AccountDetails accountDetails, @RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
+	public ResponseDto<String> signUp(
+		@AuthenticationPrincipal AccountDetails accountDetails,
+		@RequestBody AccountRequestDto.SignUp requestDto, BindingResult bindingResult) {
+
 		if (bindingResult.hasErrors()) {
 			throw new ApiException(ErrorCode.ACCOUNT_DATA_ERROR);
 		}
@@ -52,8 +56,10 @@ public class AccountController {
 
 	@Operation(summary = "계정 정보 수정", description = "jwt 토큰 필요")
 	@PatchMapping("")
-	public ResponseDto<AccountResponseDto.Info> updateUserInfo(HttpServletRequest request, @RequestBody AccountRequestDto.Update updateDto) {
-		return ResponseUtil.SUCCESS("유저 정보 수정에 성공하였습니다.", accountService.updateUserInfo(request.getHeader("Authorization"), updateDto));
+	public ResponseDto<AccountResponseDto.Info> updateUserInfo(HttpServletRequest request,
+		@RequestBody AccountRequestDto.Update updateDto) {
+		return ResponseUtil.SUCCESS("유저 정보 수정에 성공하였습니다.",
+			accountService.updateUserInfo(request.getHeader("Authorization"), updateDto));
 	}
 
 	@Operation(summary = "회원탈퇴", description = "jwt 토큰 필요")
@@ -61,6 +67,12 @@ public class AccountController {
 	public String deleteAccount(HttpServletRequest request) {
 		accountService.deleteAccount(request.getHeader("Authorization"));
 		return "회원탈퇴에 성공하였습니다.";
+	}
+
+	@Operation(summary = "역할 및 Id 조회")
+	@GetMapping("/role/{accountId}")
+	public ResponseDto<AccountResponseDto.RoleInfo> getRoleInfo(@PathVariable Long accountId) {
+		return ResponseUtil.SUCCESS("유저 역할 및 Id 조회에 성공하였습니다.", accountService.getAccountRole(accountId));
 	}
 
 }

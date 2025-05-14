@@ -2,6 +2,7 @@ package kr.co.onehunnit.onhunnit.dto.account;
 
 import kr.co.onehunnit.onhunnit.domain.account.Account;
 import kr.co.onehunnit.onhunnit.domain.account.Gender;
+import kr.co.onehunnit.onhunnit.domain.account.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,6 +30,13 @@ public class AccountResponseDto {
 				.gender(account.getGender())
 				.build();
 		}
+	}
+
+	@Getter
+	@Builder
+	public static class RoleInfo {
+		private Role role;
+		private Long id;
 	}
 
 }
