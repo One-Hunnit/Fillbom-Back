@@ -66,7 +66,7 @@ public class PatientController {
 
 	@Operation(summary = "환자 Id 조회")
 	@GetMapping("/id")
-	public ResponseDto<PatientResponseDto.Id> getCaregiverId(@AuthenticationPrincipal AccountDetails accountDetails) {
+	public ResponseDto<PatientResponseDto.Id> getPatientId(@AuthenticationPrincipal AccountDetails accountDetails) {
 		return ResponseUtil.SUCCESS("환자 ID 조회에 성공하였습니다.", patientService.getPatientId(accountDetails.getAccount()));
 	}
 

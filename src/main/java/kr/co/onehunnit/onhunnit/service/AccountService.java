@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.jsonwebtoken.JwtException;
+import kr.co.onehunnit.onhunnit.config.exception.ApiException;
+import kr.co.onehunnit.onhunnit.config.exception.ErrorCode;
 import kr.co.onehunnit.onhunnit.config.jwt.JwtTokenProvider;
 import kr.co.onehunnit.onhunnit.config.redis.RedisUtils;
 import kr.co.onehunnit.onhunnit.domain.account.Account;
-import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.account.Provider;
+import kr.co.onehunnit.onhunnit.domain.caregiver.Caregiver;
 import kr.co.onehunnit.onhunnit.domain.global.Role;
 import kr.co.onehunnit.onhunnit.domain.patient.Patient;
 import kr.co.onehunnit.onhunnit.dto.account.AccountRequestDto;
@@ -62,6 +64,7 @@ public class AccountService {
 	@Transactional
 	public void deleteAccount(String accessToken) {
 		Account account = getAccountByToken(accessToken);
+
 		if (account.getPatient() != null) {
 			locationService.deletePatientLocations(account.getPatient().getId());
 		}
@@ -71,10 +74,25 @@ public class AccountService {
 		accountRepository.delete(account);
 	}
 
+	public AccountResponseDto.RoleInfo getAccountRole(Long accountId) {
+		Account account = accountRepository.findById(accountId)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_EXIST_ACCOUNT));
+
+		Long roleId = (account.getPatient() != null)
+			? account.getPatient().getId()
+			: account.getCaregiver().getId();
+
+		return AccountResponseDto.RoleInfo.builder()
+			.role(account.getRole())
+			.id(roleId)
+			.build();
+	}
+
 	public Account getAccountByToken(String accessToken) {
 		TokenAccountInfoDto.TokenInfo tokenInfoDto = jwtTokenProvider.extractTokenInfoFromJwt(accessToken);
 		String email = tokenInfoDto.getEmail();
 		Provider provider = Provider.valueOf(tokenInfoDto.getProvider());
+
 		return accountRepository.findByEmailAndProvider(email, provider)
 			.orElseThrow(() -> new JwtException("토큰에 해당하는 계정 정보가 없습니다."));
 	}
@@ -83,7 +101,12 @@ public class AccountService {
 		Account account = getAccountByToken(accessToken);
 		Role role = getRole(account);
 		Integer age = calcAge(account);
-		return TokenAccountInfoDto.builder().account(account).age(age).role(role).build();
+
+		return TokenAccountInfoDto.builder()
+			.account(account)
+			.age(age)
+			.role(role)
+			.build();
 	}
 
 	private Role getRole(Account account) {
