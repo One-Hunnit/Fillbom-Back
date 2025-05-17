@@ -28,34 +28,34 @@ reviews:
         - 메서드의 순서는 public을 위에 두되, private의 경우 사용하는 메서드 아래에 둔다.
     - path: '**/controller/**'
       instructions: >
-        - URL, HTTP 메서드(@PostMapping 등)가 RESTful하게 설계되어있다.
-        - Service 계층으로의 위임이 명확하며, 비즈니스 로직이 없고 요청과 응답만 수행한다.
+        - URL, HTTP 메서드(@PostMapping 등)가 RESTful하게 설계되어 있는지 확인한다.
+        - Service 계층으로의 위임이 명확하며, 비즈니스 로직은 포함하지 않고 요청 처리와 응답 반환만 수행한다.
 
     - path: '**/service/**'
       instructions: >
         - 핵심 비즈니스 로직이 이 계층에 집중되어 있는지 확인한다.
-        - 트랜잭션 범위가 정확하게 지정되어 있는지 (@Transactional)
-        - 예외 처리 흐름이 누락되지 않았는지
-        - Repository 의존성이 명확하며 순환참조 없이 주입되고 있는지
-        - Repository 계층이 Optional 반환 시 Null 처리 방식이 명확히 되어 있는지 확인한다.
+        - @Transactional 어노테이션의 적용 범위(클래스 vs 메서드 수준)가 명확한지 확인한다.
+        - 예외 처리 흐름이 누락되지 않았는지 검토한다.
+        - Repository 의존성이 명확하며, 순환참조 없이 주입되고 있는지 확인한다.
+        - Repository 계층이 Optional 반환 시, 값이 없을 경우 커스텀 예외를 던지는 방식이 적용되어 있는지 확인한다.
 
     - path: '**/repository/**'
       instructions: >
-        - JPA 메서드 명명 규칙에 맞게 메서드가 선언되었는지 (findBy, countBy 등)
-        - @Query 사용 시 JPQL 쿼리가 명확하며, Native Query는 최소화하고 주석이 있는지
+        - JPA 메서드 명명 규칙(findBy, countBy 등)에 맞게 메서드가 선언되었는지 확인한다.
+        - @Query 사용 시 JPQL 쿼리가 명확하며, Native Query는 최소화하고 주석으로 설명이 되어 있는지 확인한다.
 
     - path: '**/dto/**'
       instructions: >
-        - DTO가 도메인 객체(Entity)와 명확히 분리되어 있는지
-        - @Builder, @Getter, @NoArgsConstructor 등 Lombok 어노테이션이 일관성 있게 적용되었는지
-        - DTO 간 역할(Request/Response)의 명확한 구분이 있는지
-        - Entity를 직접 전달하거나 받는 구조가 아닌지 확인
+        - DTO가 도메인 객체(Entity)와 명확히 분리되어 있는지 확인한다.
+        - @Builder, @Getter, @NoArgsConstructor 등 Lombok 어노테이션이 일관되게 적용되었는지 확인한다.
+        - DTO 간 역할(Request/Response)의 명확한 구분되어 있는지 확인한다.
+        - Entity를 직접 전달하거나 받는 구조가 아닌지 확인한다.
 
     - path: '**/domain/**'
       instructions: >
-        - @Entity 및 @Table 선언이 적절하며, 필드명은 명확하고 도메인 용어를 사용하고 있는지 확인
-        - 예약어인 경우 복수형 또는 동의어를 찾아 작성한다.
-        - 연관관계 설정(@ManyToOne 등)이 명확하고 FetchType 설정이 명시적인지
+        - @Entity 및 @Table 선언이 적절하며, 필드명은 명확하고 도메인 용어를 사용하고 있는지 확인한다.
+        - 예약어 테이블명을 사용할 경우 복수형이나 유의어를 사용하였는지 확인한다. (예: order -> orders)
+        - 연관관계 설정(@ManyToOne 등)이 명확하고 FetchType 설정이 명시적인지 확인한다.
 
   auto_review:
     enabled: true
